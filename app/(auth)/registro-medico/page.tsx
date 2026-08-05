@@ -60,6 +60,13 @@ export default function RegistroMedicoPage() {
 
     setCargando(true);
     const captchaToken = captchaTokenState || (await obtenerTokenTurnstile('registro_medico'));
+    
+    if (!captchaToken) {
+      console.error('Fallo al obtener Token de Turnstile. Estado:', captchaTokenState);
+      setError('Fallo la verificación de seguridad (Captcha). Por favor, intenta de nuevo o recarga la página.');
+      setCargando(false);
+      return;
+    }
 
     const res = await registrarMedicoSupabase({
       email,

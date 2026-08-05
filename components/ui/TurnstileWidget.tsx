@@ -51,7 +51,13 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
     };
   }, [siteKey, onSuccess, onError, onExpire]);
 
-  if (!siteKey) return null;
+  if (!siteKey) {
+    return (
+      <div style={{ color: 'var(--color-danger)', fontSize: '14px', textAlign: 'center', padding: '10px', border: '1px dashed var(--color-danger)', borderRadius: '8px', margin: '12px 0' }}>
+        ⚠️ Error de Configuración: Falta NEXT_PUBLIC_TURNSTILE_SITE_KEY
+      </div>
+    );
+  }
 
   return <div ref={containerRef} style={{ display: 'flex', justifyContent: 'center', margin: '12px 0' }} />;
 };
