@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { useAppStore } from '@/stores/app-store';
 import {
   Activity,
   Stethoscope,
@@ -17,7 +16,6 @@ import {
 
 export default function LandingPage() {
   const router = useRouter();
-  const iniciarSesionDemo = useAppStore((state) => state.iniciarSesionDemo);
 
   const handleIrPaciente = () => {
     router.push('/sintomas');

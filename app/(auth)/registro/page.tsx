@@ -222,8 +222,8 @@ export default function RegistroPacientePage() {
                     <span>Atrás</span>
                   </Button>
 
-                  <Button type="submit" variante="primario" style={{ flex: 2 }}>
-                    <span>Crear Cuenta</span>
+                  <Button type="submit" variante="primario" disabled={cargando} style={{ flex: 2 }}>
+                    <span>{cargando ? 'Creando...' : 'Crear Cuenta'}</span>
                     <CheckCircle2 size={18} />
                   </Button>
                 </div>

@@ -204,8 +204,8 @@ export default function RegistroMedicoPage() {
                 required
               />
 
-              <Button type="submit" variante="primario" tamano="grande" style={{ marginTop: '8px', width: '100%' }}>
-                <span>Registrarme como Médico</span>
+              <Button type="submit" variante="primario" tamano="grande" disabled={cargando} style={{ marginTop: '8px', width: '100%' }}>
+                <span>{cargando ? 'Registrando...' : 'Registrarme como Médico'}</span>
                 <CheckCircle2 size={18} />
               </Button>
             </form>

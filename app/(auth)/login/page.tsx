@@ -15,7 +15,6 @@ import {
   ArrowRight,
   ShieldAlert,
   Sparkles,
-  UserPlus,
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -173,8 +172,14 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <Button variante="primario" tamano="grande" type="submit" style={{ width: '100%', marginTop: '4px' }}>
-                <span>Ingresar al Sistema</span>
+              <Button
+                variante="primario"
+                tamano="grande"
+                type="submit"
+                disabled={cargando}
+                style={{ width: '100%', marginTop: '4px' }}
+              >
+                <span>{cargando ? 'Ingresando...' : 'Ingresar al Sistema'}</span>
                 <ArrowRight size={18} />
               </Button>
             </form>
