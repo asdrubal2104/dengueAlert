@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/Card';
 import { DEPARTAMENTOS_NICARAGUA, RegistroPacienteSchema } from '@/lib/validators/auth';
 import { DepartamentoNicaragua } from '@/types/nicaragua';
 import { registrarPacienteSupabase } from '@/lib/supabase/services';
-import { obtenerTokenRecaptchaV3 } from '@/lib/security/recaptcha';
+import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
 import { ArrowLeft, ArrowRight, CheckCircle2, User } from 'lucide-react';
 
 export default function RegistroPacientePage() {
@@ -60,7 +60,7 @@ export default function RegistroPacientePage() {
     }
 
     setCargando(true);
-    const captchaToken = await obtenerTokenRecaptchaV3('registro_paciente');
+    const captchaToken = await obtenerTokenTurnstile('registro_paciente');
 
     const res = await registrarPacienteSupabase({
       email,

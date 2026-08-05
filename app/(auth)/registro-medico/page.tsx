@@ -15,7 +15,7 @@ import {
 } from '@/lib/validators/auth';
 import { SilaisNicaragua, EspecialidadMedica } from '@/types/nicaragua';
 import { registrarMedicoSupabase } from '@/lib/supabase/services';
-import { obtenerTokenRecaptchaV3 } from '@/lib/security/recaptcha';
+import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
 import { Stethoscope, CheckCircle2 } from 'lucide-react';
 
 export default function RegistroMedicoPage() {
@@ -57,7 +57,7 @@ export default function RegistroMedicoPage() {
     }
 
     setCargando(true);
-    const captchaToken = await obtenerTokenRecaptchaV3('registro_medico');
+    const captchaToken = await obtenerTokenTurnstile('registro_medico');
 
     const res = await registrarMedicoSupabase({
       email,
