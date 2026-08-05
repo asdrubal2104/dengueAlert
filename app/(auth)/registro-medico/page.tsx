@@ -16,6 +16,7 @@ import {
 import { SilaisNicaragua, EspecialidadMedica } from '@/types/nicaragua';
 import { registrarMedicoSupabase } from '@/lib/supabase/services';
 import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
+import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
 import { Stethoscope, CheckCircle2 } from 'lucide-react';
 
 export default function RegistroMedicoPage() {
@@ -32,6 +33,7 @@ export default function RegistroMedicoPage() {
   const [telefono, setTelefono] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
+  const [captchaTokenState, setCaptchaTokenState] = useState<string | undefined>(undefined);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +59,7 @@ export default function RegistroMedicoPage() {
     }
 
     setCargando(true);
-    const captchaToken = await obtenerTokenTurnstile('registro_medico');
+    const captchaToken = captchaTokenState || (await obtenerTokenTurnstile('registro_medico'));
 
     const res = await registrarMedicoSupabase({
       email,
@@ -203,6 +205,8 @@ export default function RegistroMedicoPage() {
                 onChange={(e) => setTelefono(e.target.value)}
                 required
               />
+
+              <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
 
               <Button type="submit" variante="primario" tamano="grande" disabled={cargando} style={{ marginTop: '8px', width: '100%' }}>
                 <span>{cargando ? 'Registrando...' : 'Registrarme como Médico'}</span>

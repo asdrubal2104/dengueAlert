@@ -12,6 +12,7 @@ import { DEPARTAMENTOS_NICARAGUA, RegistroPacienteSchema } from '@/lib/validator
 import { DepartamentoNicaragua } from '@/types/nicaragua';
 import { registrarPacienteSupabase } from '@/lib/supabase/services';
 import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
+import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
 import { ArrowLeft, ArrowRight, CheckCircle2, User } from 'lucide-react';
 
 export default function RegistroPacientePage() {
@@ -25,6 +26,7 @@ export default function RegistroPacientePage() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [departamento, setDepartamento] = useState<DepartamentoNicaragua>('Managua');
   const [error, setError] = useState<string | null>(null);
+  const [captchaTokenState, setCaptchaTokenState] = useState<string | undefined>(undefined);
 
   const handleSiguientePaso1 = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +62,7 @@ export default function RegistroPacientePage() {
     }
 
     setCargando(true);
-    const captchaToken = await obtenerTokenTurnstile('registro_paciente');
+    const captchaToken = captchaTokenState || (await obtenerTokenTurnstile('registro_paciente'));
 
     const res = await registrarPacienteSupabase({
       email,
@@ -210,6 +212,8 @@ export default function RegistroPacientePage() {
                   onChange={(e) => setDepartamento(e.target.value as DepartamentoNicaragua)}
                   opciones={DEPARTAMENTOS_NICARAGUA}
                 />
+
+                <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
                   <Button

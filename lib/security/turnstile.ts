@@ -13,6 +13,7 @@ declare global {
           action?: string;
           callback: (token: string) => void;
           'error-callback'?: () => void;
+          'expired-callback'?: () => void;
         }
       ) => string;
       execute?: (container: string | HTMLElement, options?: any) => void;
