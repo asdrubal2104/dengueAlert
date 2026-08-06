@@ -1,4 +1,5 @@
 import { createClient } from './client';
+import { traducirErrorSupabase } from './errors';
 import { RegistroSintomas, Alerta } from '@/types/dengue';
 import { PerfilUsuario } from '@/types/user';
 
@@ -21,7 +22,7 @@ export async function registrarPacienteSupabase(datos: {
       options: datos.captchaToken ? { captchaToken: datos.captchaToken } : undefined,
     });
 
-    if (authError) return { ok: false, error: authError.message };
+    if (authError) return { ok: false, error: traducirErrorSupabase(authError.message) };
     if (!authData.user) return { ok: false, error: 'No se pudo crear el usuario en Supabase' };
 
     const perfil: PerfilUsuario = {
@@ -74,7 +75,7 @@ export async function registrarMedicoSupabase(datos: {
       options: datos.captchaToken ? { captchaToken: datos.captchaToken } : undefined,
     });
 
-    if (authError) return { ok: false, error: authError.message };
+    if (authError) return { ok: false, error: traducirErrorSupabase(authError.message) };
     if (!authData.user) return { ok: false, error: 'No se pudo crear el usuario en Supabase' };
 
     const perfil: PerfilUsuario = {
@@ -127,7 +128,7 @@ export async function iniciarSesionSupabase(
       options: captchaToken ? { captchaToken } : undefined,
     });
 
-    if (authError) return { ok: false, error: authError.message };
+    if (authError) return { ok: false, error: traducirErrorSupabase(authError.message) };
     if (!authData.user) return { ok: false, error: 'Usuario no encontrado' };
 
     const { data: profile } = await supabase

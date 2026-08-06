@@ -13,6 +13,7 @@ import { DepartamentoNicaragua } from '@/types/nicaragua';
 import { registrarPacienteSupabase } from '@/lib/supabase/services';
 import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
 import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
+import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
 import { ArrowLeft, ArrowRight, CheckCircle2, User } from 'lucide-react';
 
 export default function RegistroPacientePage() {
@@ -189,6 +190,7 @@ export default function RegistroPacientePage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                <PasswordStrengthMeter password={password} />
 
                 <Button variante="primario" tamano="grande" type="submit" style={{ width: '100%' }}>
                   <span>Continuar a datos de perfil</span>

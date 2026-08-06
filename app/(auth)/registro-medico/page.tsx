@@ -17,6 +17,7 @@ import { SilaisNicaragua, EspecialidadMedica } from '@/types/nicaragua';
 import { registrarMedicoSupabase } from '@/lib/supabase/services';
 import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
 import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
+import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
 import { Stethoscope, CheckCircle2 } from 'lucide-react';
 
 export default function RegistroMedicoPage() {
@@ -160,11 +161,12 @@ export default function RegistroMedicoPage() {
               <Input
                 etiqueta="Contraseña"
                 type="password"
-                placeholder="••••••••"
+                placeholder="Mínimo 6 caracteres"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <PasswordStrengthMeter password={password} />
 
               <Input
                 etiqueta="Nombre completo (con título Dr./Dra.)"

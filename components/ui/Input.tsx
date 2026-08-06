@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   etiqueta?: string;
@@ -15,13 +16,18 @@ export const Input: React.FC<InputProps> = ({
   textoAyuda,
   ayuda,
   id,
+  type,
   className = '',
   style,
   ...props
 }) => {
+  const [mostrarPassword, setMostrarPassword] = useState(false);
   const labelText = etiqueta || label;
   const helpText = textoAyuda || ayuda;
   const inputId = id || (labelText ? labelText.toLowerCase().replace(/\s+/g, '-') : undefined);
+
+  const isPassword = type === 'password';
+  const inputType = isPassword ? (mostrarPassword ? 'text' : 'password') : type;
 
   return (
     <div className="campo-formulario">
@@ -30,19 +36,46 @@ export const Input: React.FC<InputProps> = ({
           {labelText}
         </label>
       )}
-      <input
-        id={inputId}
-        className={`input ${className}`}
-        aria-invalid={Boolean(error)}
-        aria-describedby={
-          error ? `${inputId}-error` : helpText ? `${inputId}-ayuda` : undefined
-        }
-        style={{
-          border: error ? '1px solid var(--color-danger)' : undefined,
-          ...style,
-        }}
-        {...props}
-      />
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <input
+          id={inputId}
+          type={inputType}
+          className={`input ${className}`}
+          aria-invalid={Boolean(error)}
+          aria-describedby={
+            error ? `${inputId}-error` : helpText ? `${inputId}-ayuda` : undefined
+          }
+          style={{
+            border: error ? '1px solid var(--color-danger)' : undefined,
+            paddingRight: isPassword ? '44px' : undefined,
+            width: '100%',
+            ...style,
+          }}
+          {...props}
+        />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setMostrarPassword(!mostrarPassword)}
+            aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            tabIndex={-1}
+            style={{
+              position: 'absolute',
+              right: '12px',
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4px',
+            }}
+          >
+            {mostrarPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        )}
+      </div>
       {error && (
         <span id={`${inputId}-error`} className="texto-error" role="alert">
           {error}
@@ -56,3 +89,4 @@ export const Input: React.FC<InputProps> = ({
     </div>
   );
 };
+
