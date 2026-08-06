@@ -55,7 +55,7 @@ describe('ResultadoEvaluacionPage', () => {
     const { default: ResultadoPage } = await import('../resultado/page');
     render(<ResultadoPage />);
 
-    expect(screen.getByText('Buscar centro de salud para atención hoy')).toBeInTheDocument();
+    expect(screen.getByText(/buscar centro de salud/i)).toBeInTheDocument();
     expect(screen.getByText(/Atención hoy: síntoma que requiere valoración/i)).toBeInTheDocument();
   });
 

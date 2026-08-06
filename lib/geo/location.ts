@@ -218,10 +218,20 @@ export function obtenerHospitalesCercanos(userLat?: number, userLng?: number, de
 export function solicitarUbicacionActual(): Promise<{ lat: number; lng: number }> {
   return new Promise((resolve, reject) => {
     if (typeof window === 'undefined' || !navigator.geolocation) {
-      reject(new Error('La geolocalización no está soportada en este dispositivo'));
+      reject(new Error('La geolocalización no está soportada en este navegador o dispositivo'));
       return;
     }
 
+    if (window.isSecureContext === false) {
+      reject(
+        new Error(
+          'La geolocalización requiere una conexión segura (HTTPS). En Chromium/Brave, se bloquea en enlaces HTTP no locales.',
+        ),
+      );
+      return;
+    }
+
+    // Intentar primero con alta precisión (GPS), con un timeout de 5s
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         resolve({
@@ -230,13 +240,41 @@ export function solicitarUbicacionActual(): Promise<{ lat: number; lng: number }
         });
       },
       (err) => {
-        let mensaje = 'Ubicación GPS no disponible';
-        if (err.code === 1) mensaje = 'Acceso a ubicación no concedido en el navegador';
-        else if (err.code === 2) mensaje = 'Posición GPS no disponible en este momento';
-        else if (err.code === 3) mensaje = 'Tiempo de respuesta GPS agotado';
-        reject(new Error(mensaje));
+        // En navegadores de escritorio como Brave (donde Google Location Services puede estar desactivado),
+        // enableHighAccuracy: true puede fallar por TIMEOUT (code 3) o POSITION_UNAVAILABLE (code 2).
+        // Realizamos un reintento automático con enableHighAccuracy: false.
+        if (err.code === 3 || err.code === 2) {
+          navigator.geolocation.getCurrentPosition(
+            (posLow) => {
+              resolve({
+                lat: posLow.coords.latitude,
+                lng: posLow.coords.longitude,
+              });
+            },
+            (errLow) => {
+              reject(procesarErrorGeolocalizacion(errLow));
+            },
+            { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 },
+          );
+        } else {
+          reject(procesarErrorGeolocalizacion(err));
+        }
       },
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 },
     );
   });
 }
+
+function procesarErrorGeolocalizacion(err: GeolocationPositionError): Error {
+  let mensaje = 'No se pudo obtener la ubicación GPS';
+  if (err.code === 1) {
+    mensaje =
+      'Permiso de ubicación denegado. En Brave / Chromium: haz clic en el icono del candado o del escudo en la barra de direcciones y selecciona "Permitir" en Ubicación.';
+  } else if (err.code === 2) {
+    mensaje = 'Posición GPS no disponible actualmente en este dispositivo o red.';
+  } else if (err.code === 3) {
+    mensaje = 'Tiempo de espera agotado al solicitar la ubicación GPS.';
+  }
+  return new Error(mensaje);
+}
+

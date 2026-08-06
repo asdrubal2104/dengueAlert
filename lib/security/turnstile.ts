@@ -17,6 +17,7 @@ declare global {
         }
       ) => string;
       execute?: (container: string | HTMLElement, options?: any) => void;
+      reset?: (widgetId: string) => void;
       remove?: (widgetId: string) => void;
     };
   }
@@ -66,7 +67,7 @@ export async function obtenerTokenTurnstile(action: string = 'signup'): Promise<
     if (!document.getElementById(scriptId)) {
       const script = document.createElement('script');
       script.id = scriptId;
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
       script.async = true;
       script.onload = ejecutar;
       script.onerror = () => resolve(undefined);

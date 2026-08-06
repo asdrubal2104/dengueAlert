@@ -11,7 +11,6 @@ import { Card } from '@/components/ui/Card';
 import { DEPARTAMENTOS_NICARAGUA, RegistroPacienteSchema } from '@/lib/validators/auth';
 import { DepartamentoNicaragua } from '@/types/nicaragua';
 import { registrarPacienteSupabase } from '@/lib/supabase/services';
-import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
 import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
 import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
 import { ArrowLeft, ArrowRight, CheckCircle2, User } from 'lucide-react';

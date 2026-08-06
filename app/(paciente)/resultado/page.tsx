@@ -385,20 +385,14 @@ export default function ResultadoEvaluacionPage() {
           </Button>
         )}
 
-        <a
-          href={
-            usuarioActual?.departamento
-              ? `https://www.google.com/maps/search/?api=1&query=hospital+minsa+centro+de+salud+${encodeURIComponent(usuarioActual.departamento)}`
-              : 'https://www.google.com/maps/search/?api=1&query=hospital+minsa+centro+de+salud+mas+cercano'
-          }
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/alerta"
           className="btn btn-secundario"
           style={{ textDecoration: 'none', width: '100%' }}
         >
           <MapPin size={18} />
-          <span>{resultado.nivelAtencion === 'ATENCION_HOY' ? 'Buscar centro de salud para atención hoy' : 'Ver mapa de centros de salud cercanos'}</span>
-        </a>
+          <span>{resultado.nivelAtencion === 'ATENCION_HOY' ? '📍 Activar GPS y buscar centro de salud para hoy' : '📍 Ver mapa de centros de salud cercanos'}</span>
+        </Link>
 
         <Link 
           href="/sintomas" 

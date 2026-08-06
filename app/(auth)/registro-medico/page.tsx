@@ -15,7 +15,6 @@ import {
 } from '@/lib/validators/auth';
 import { SilaisNicaragua, EspecialidadMedica } from '@/types/nicaragua';
 import { registrarMedicoSupabase } from '@/lib/supabase/services';
-import { obtenerTokenTurnstile } from '@/lib/security/turnstile';
 import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
 import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
 import { Stethoscope, CheckCircle2 } from 'lucide-react';
