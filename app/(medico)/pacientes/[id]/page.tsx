@@ -20,6 +20,9 @@ import {
   FileText,
   User,
   Pill,
+  Droplets,
+  Scale,
+  ShieldAlert,
 } from 'lucide-react';
 
 export default function DetallePacientePage({ params }: { params: { id: string } }) {
@@ -59,47 +62,61 @@ export default function DetallePacientePage({ params }: { params: { id: string }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }} className="slide-up">
       {/* Top Header Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <Link href="/pacientes" style={{ color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center' }}>
-          <ArrowLeft size={22} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <Link
+          href="/pacientes"
+          style={{
+            color: 'var(--color-text-secondary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '42px',
+            height: '42px',
+            borderRadius: '12px',
+            backgroundColor: 'var(--color-surface-0)',
+            border: '1px solid var(--color-border)',
+            textDecoration: 'none',
+          }}
+        >
+          <ArrowLeft size={20} />
         </Link>
         <div>
-          <h2 style={{ fontSize: '1.375rem', fontWeight: 800 }}>
+          <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--color-text)' }}>
             Expediente Clínico del Paciente
           </h2>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)' }}>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
             Historial de monitoreo y notas de evolución MINSA.
           </p>
         </div>
       </div>
 
       {/* Patient Header Card (Full Width) */}
-      <Card style={{ padding: '20px', marginBottom: 0 }}>
+      <Card style={{ padding: '24px', backgroundColor: 'var(--color-surface-0)' }}>
         {/* Card Top Row: ID & Status Badge */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', gap: '8px', flexWrap: 'wrap' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', gap: '10px', flexWrap: 'wrap' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em', backgroundColor: 'var(--color-primary-soft)', padding: '4px 10px', borderRadius: '8px' }}>
             Expediente MINSA #{paciente.id.slice(0, 8).toUpperCase()}
           </div>
           {ultimaEval && <Badge tipo={ultimaEval.clasificacion} />}
         </div>
 
         {/* Patient Profile Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '18px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '18px', marginBottom: '22px' }}>
           <div
             style={{
-              width: '54px',
-              height: '54px',
-              borderRadius: '16px',
+              width: '60px',
+              height: '60px',
+              borderRadius: '18px',
               background: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)',
               color: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 900,
-              fontSize: '1.375rem',
-              boxShadow: '0 4px 16px rgba(14, 165, 233, 0.35)',
+              fontSize: '1.5rem',
+              boxShadow: '0 6px 20px rgba(14, 165, 233, 0.35)',
               flexShrink: 0,
             }}
           >
@@ -107,14 +124,16 @@ export default function DetallePacientePage({ params }: { params: { id: string }
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1.25, marginBottom: '6px' }}>
+            <h3 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1.25, marginBottom: '6px' }}>
               {paciente.nombreCompleto}
             </h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.8125rem', color: 'var(--color-text-secondary)', flexWrap: 'wrap' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                <MapPin size={14} style={{ color: 'var(--color-primary)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.875rem', color: 'var(--color-text-secondary)', flexWrap: 'wrap' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                <MapPin size={15} style={{ color: 'var(--color-primary)' }} />
                 <span>{paciente.departamento || 'Nicaragua'}</span>
               </span>
+              <span style={{ opacity: 0.4 }}>•</span>
+              <span style={{ color: 'var(--color-text-muted)' }}>{paciente.email || 'Expediente digital'}</span>
             </div>
           </div>
         </div>
@@ -125,62 +144,110 @@ export default function DetallePacientePage({ params }: { params: { id: string }
             href={`tel:${paciente.telefono}`}
             style={{ textDecoration: 'none', display: 'block' }}
           >
-            <Button variante="secundario" style={{ width: '100%', minHeight: '46px' }}>
-              <Phone size={16} />
+            <Button variante="secundario" style={{ width: '100%', minHeight: '48px', borderRadius: '14px' }}>
+              <Phone size={18} />
               <span>Llamar al Paciente ({paciente.telefono})</span>
             </Button>
           </a>
         )}
       </Card>
 
-      {/* Clinical Metrics Grid (3 Columns) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px', fontWeight: 600 }}>Sangre</div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
+      {/* Clinical Metrics Grid (3 Columns with Spacious Design) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px' }}>
+        <div
+          style={{
+            padding: '18px 14px',
+            textAlign: 'center',
+            backgroundColor: 'rgba(239, 68, 68, 0.08)',
+            border: '1px solid rgba(239, 68, 68, 0.22)',
+            borderRadius: '18px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--color-danger)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <Droplets size={14} />
+            <span>Sangre</span>
+          </div>
+          <div style={{ fontSize: '1.375rem', fontWeight: 900, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
             {paciente.tipoSangre || 'N/A'}
           </div>
-        </Card>
+        </div>
 
-        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px', fontWeight: 600 }}>Peso</div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
+        <div
+          style={{
+            padding: '18px 14px',
+            textAlign: 'center',
+            backgroundColor: 'rgba(14, 165, 233, 0.08)',
+            border: '1px solid rgba(14, 165, 233, 0.22)',
+            borderRadius: '18px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--color-primary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <Scale size={14} />
+            <span>Peso</span>
+          </div>
+          <div style={{ fontSize: '1.375rem', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
             {paciente.pesoKg ? `${paciente.pesoKg} kg` : 'N/A'}
           </div>
-        </Card>
+        </div>
 
-        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px', fontWeight: 600 }}>Riesgo</div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-warning)', fontFamily: 'var(--font-mono)' }}>
+        <div
+          style={{
+            padding: '18px 14px',
+            textAlign: 'center',
+            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+            border: '1px solid rgba(245, 158, 11, 0.22)',
+            borderRadius: '18px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--color-warning)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <ShieldAlert size={14} />
+            <span>Riesgo</span>
+          </div>
+          <div style={{ fontSize: '1.375rem', fontWeight: 900, color: 'var(--color-warning)', fontFamily: 'var(--font-mono)' }}>
             {paciente.enfermedadesCronicas?.length ? 'Alto' : 'Normal'}
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* Clinical Operations Panel (2 Columns on Tablet, 1 on Mobile) */}
       <div className="grid-responsive-2col">
         {/* Patient Antecedents & Clinical Profile Card */}
-        <Card style={{ marginBottom: 0, backgroundColor: 'var(--color-surface-1)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text)' }}>
-            <User size={18} style={{ color: 'var(--color-primary)' }} />
+        <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-text)' }}>
+            <User size={20} style={{ color: 'var(--color-primary)' }} />
             <span>Ficha de Antecedentes Médicos</span>
           </h3>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ padding: '10px 12px', borderRadius: '12px', backgroundColor: 'var(--color-surface-0)', border: '1px solid var(--color-border)' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <AlertTriangle size={14} /> Comorbilidades Reportadas
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'var(--color-surface-1)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <AlertTriangle size={15} /> Comorbilidades Reportadas
               </div>
-              <div style={{ fontSize: '0.8125rem', marginTop: '4px', color: 'var(--color-text)', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.875rem', marginTop: '6px', color: 'var(--color-text)', fontWeight: 600 }}>
                 {paciente.enfermedadesCronicas?.length ? paciente.enfermedadesCronicas.join(', ') : 'Sin comorbilidades reportadas'}
               </div>
             </div>
 
-            <div style={{ padding: '10px 12px', borderRadius: '12px', backgroundColor: 'var(--color-surface-0)', border: '1px solid var(--color-border)' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Pill size={14} /> Medicamentos Actuales
+            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'var(--color-surface-1)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <Pill size={15} /> Medicamentos Actuales
               </div>
-              <div style={{ fontSize: '0.8125rem', marginTop: '4px', color: 'var(--color-text)', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.875rem', marginTop: '6px', color: 'var(--color-text)', fontWeight: 600 }}>
                 {paciente.medicamentosActuales || 'Sin medicamentos continuos registrados'}
               </div>
             </div>
@@ -188,16 +255,16 @@ export default function DetallePacientePage({ params }: { params: { id: string }
         </Card>
 
         {/* Clinical Evolution Notes Form Card */}
-        <Card style={{ marginBottom: 0, backgroundColor: 'var(--color-surface-1)' }}>
-          <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text)' }}>
-            <Activity size={18} style={{ color: 'var(--color-primary)' }} />
+        <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '24px' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-text)' }}>
+            <Activity size={20} style={{ color: 'var(--color-primary)' }} />
             <span>Agregar Nota de Evolución Médica</span>
           </h3>
 
           {notaGuardada && (
-            <div style={{ padding: '10px', backgroundColor: 'var(--color-success-soft)', color: 'var(--color-success)', borderRadius: '10px', fontSize: '0.8125rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <CheckCircle2 size={16} />
-              <span>Nota guardada correctamente en el expediente MINSA.</span>
+            <div style={{ padding: '12px 14px', backgroundColor: 'var(--color-success-soft)', color: 'var(--color-success)', borderRadius: '12px', fontSize: '0.8125rem', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+              <CheckCircle2 size={18} />
+              <span style={{ fontWeight: 700 }}>Nota guardada correctamente en el expediente MINSA.</span>
             </div>
           )}
 
@@ -208,11 +275,11 @@ export default function DetallePacientePage({ params }: { params: { id: string }
               onChange={(e) => setNotaMedica(e.target.value)}
               placeholder="Escribí indicaciones sobre hidratación, hemograma o referencia a hospital..."
               className="input"
-              style={{ padding: '12px', height: 'auto', marginBottom: '12px', resize: 'none' }}
+              style={{ padding: '14px', height: 'auto', marginBottom: '16px', resize: 'none', borderRadius: '14px' }}
             />
 
-            <Button variante="primario" type="submit" style={{ width: '100%', minHeight: '44px' }}>
-              <Save size={16} />
+            <Button variante="primario" type="submit" style={{ width: '100%', minHeight: '48px', borderRadius: '14px' }}>
+              <Save size={18} />
               <span>Guardar Nota Médica</span>
             </Button>
           </form>
@@ -221,8 +288,8 @@ export default function DetallePacientePage({ params }: { params: { id: string }
 
       {/* Evaluations Timeline (Full Width Section) */}
       <div>
-        <h3 style={{ fontSize: '1.125rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Clock size={18} style={{ color: 'var(--color-primary)' }} />
+        <h3 style={{ fontSize: '1.125rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-text)' }}>
+          <Clock size={20} style={{ color: 'var(--color-primary)' }} />
           <span>Historial de Evaluaciones ({registros.length})</span>
         </h3>
 
@@ -242,9 +309,9 @@ export default function DetallePacientePage({ params }: { params: { id: string }
               .filter(Boolean);
 
             return (
-              <Card key={r.id || i} style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: 0 }}>
+              <Card key={r.id || i} style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '14px', backgroundColor: 'var(--color-surface-0)', borderRadius: '20px' }}>
                 {/* Header Row: Badge & Clean Date */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', flexWrap: 'wrap', borderBottom: '1px solid var(--color-border)', paddingBottom: '12px' }}>
                   <Badge tipo={r.clasificacion} />
                   <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontWeight: 600, flexShrink: 0 }} suppressHydrationWarning>
                     <Clock size={13} style={{ color: 'var(--color-primary)' }} />
@@ -254,18 +321,18 @@ export default function DetallePacientePage({ params }: { params: { id: string }
 
                 {/* Symptoms Reported Pills */}
                 <div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.03em' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-text-secondary)', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.04em' }}>
                     Síntomas Reportados ({sintomasObjetos.length})
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {sintomasObjetos.map((s) => (
                       <span
                         key={s?.id}
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: '5px',
-                          padding: '4px 10px',
+                          gap: '6px',
+                          padding: '5px 12px',
                           borderRadius: '9999px',
                           backgroundColor: s?.esSignoAlarma ? 'rgba(239, 68, 68, 0.15)' : 'var(--color-surface-1)',
                           color: s?.esSignoAlarma ? '#F87171' : 'var(--color-text-secondary)',
@@ -274,7 +341,7 @@ export default function DetallePacientePage({ params }: { params: { id: string }
                           fontWeight: s?.esSignoAlarma ? 700 : 600,
                         }}
                       >
-                        <SintomaIcon nombreIcono={s?.icono || 'stethoscope'} size={13} />
+                        <SintomaIcon nombreIcono={s?.icono || 'stethoscope'} size={14} />
                         <span>{s?.nombre}</span>
                       </span>
                     ))}
@@ -287,19 +354,19 @@ export default function DetallePacientePage({ params }: { params: { id: string }
                     style={{
                       backgroundColor: 'rgba(14, 165, 233, 0.08)',
                       border: '1px solid rgba(14, 165, 233, 0.25)',
-                      borderRadius: '12px',
-                      padding: '10px 12px',
+                      borderRadius: '14px',
+                      padding: '12px 14px',
                       fontSize: '0.8125rem',
                       color: 'var(--color-text-secondary)',
-                      lineHeight: 1.45,
+                      lineHeight: 1.5,
                       display: 'flex',
                       alignItems: 'flex-start',
-                      gap: '8px',
+                      gap: '10px',
                     }}
                   >
-                    <FileText size={16} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: '2px' }} />
+                    <FileText size={18} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: '2px' }} />
                     <div>
-                      <strong style={{ color: 'var(--color-primary)', display: 'block', marginBottom: '2px' }}>
+                      <strong style={{ color: 'var(--color-primary)', display: 'block', marginBottom: '2px', fontWeight: 800 }}>
                         Evolución Médica MINSA:
                       </strong>
                       {r.notas}

@@ -14,8 +14,6 @@ import {
   Plus,
   Activity,
   ShieldCheck,
-  Sparkles,
-  RotateCcw,
   Clock,
   AlertTriangle,
   Users,
@@ -29,9 +27,6 @@ export default function DoctorDashboardPage() {
   const registros = useAppStore((state) => state.registros);
   const codigoVinculacionActual = useAppStore((state) => state.codigoVinculacionActual);
   const generarCodigoVinculacion = useAppStore((state) => state.generarCodigoVinculacion);
-  const cargarDatosDemo = useAppStore((state) => state.cargarDatosDemo);
-  const limpiarDatosDemo = useAppStore((state) => state.limpiarDatosDemo);
-  const esModoDemo = useAppStore((state) => state.esModoDemo);
 
   const totalPacientes = pacientesVinc.length;
   const alertasCriticas = alertas.filter((a) => a.tipo === 'EMERGENCY' || a.tipo === 'WARNING');
@@ -56,60 +51,61 @@ export default function DoctorDashboardPage() {
   const pacientesBajoRiesgo = registros.filter((r) => r.clasificacion === 'BAJO_RIESGO').length;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }} className="slide-up">
       {/* Credential Header Card */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 50%, #075985 100%)',
+          background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #0284C7 100%)',
           borderRadius: '24px',
-          padding: 'clamp(18px, 4vw, 24px)',
+          padding: 'clamp(20px, 4vw, 28px)',
           color: '#FFFFFF',
-          boxShadow: '0 10px 32px rgba(2, 132, 199, 0.35)',
+          boxShadow: '0 12px 36px rgba(2, 132, 199, 0.25)',
           position: 'relative',
           overflow: 'hidden',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
         }}
       >
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
             <div
               style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '14px',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                color: '#FFFFFF',
+                width: '56px',
+                height: '56px',
+                borderRadius: '16px',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                color: '#38BDF8',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backdropFilter: 'blur(8px)',
+                backdropFilter: 'blur(12px)',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
                 flexShrink: 0,
               }}
             >
-              <Stethoscope size={24} />
+              <Stethoscope size={28} />
             </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                <h2 style={{ fontSize: 'clamp(1.125rem, 3.5vw, 1.25rem)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}>
+            <div style={{ flex: '1 1 auto', minWidth: '220px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <h2 style={{ fontSize: 'clamp(1.2rem, 3.5vw, 1.4rem)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.25 }}>
                   {usuarioActual?.nombreCompleto || 'Dr. Juan Carlos Pérez López'}
                 </h2>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '2px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                   <span
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '8px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                      fontSize: '0.6875rem',
+                      gap: '5px',
+                      padding: '4px 10px',
+                      borderRadius: '999px',
+                      backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                      fontSize: '0.75rem',
                       fontWeight: 700,
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      border: '1px solid rgba(56, 189, 248, 0.35)',
                       color: '#E0F2FE'
                     }}
                   >
-                    <ShieldCheck size={12} style={{ color: '#38BDF8' }} />
+                    <ShieldCheck size={13} style={{ color: '#38BDF8' }} />
                     <span>Verificado</span>
                   </span>
 
@@ -118,13 +114,13 @@ export default function DoctorDashboardPage() {
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '8px',
-                      backgroundColor: 'rgba(14, 165, 233, 0.3)',
-                      fontSize: '0.6875rem',
+                      padding: '4px 10px',
+                      borderRadius: '999px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      fontSize: '0.75rem',
                       fontWeight: 800,
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(14, 165, 233, 0.4)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
                       color: '#FFFFFF'
                     }}
                   >
@@ -133,21 +129,23 @@ export default function DoctorDashboardPage() {
                   </span>
                 </div>
               </div>
-              <div style={{ fontSize: '0.8125rem', color: '#E0F2FE', opacity: 0.9, marginTop: '8px', lineHeight: 1.4 }}>
-                {usuarioActual?.especialidad || 'Medicina Interna'} <br/>
-                <span style={{ opacity: 0.7 }}>{usuarioActual?.unidadDeSalud || 'Hospital Escuela Manolo Morales'} — SILAIS {usuarioActual?.silais || 'Managua'}</span>
+              <div style={{ fontSize: '0.875rem', color: '#E0F2FE', opacity: 0.95, marginTop: '8px', lineHeight: 1.45 }}>
+                <span style={{ fontWeight: 700 }}>{usuarioActual?.especialidad || 'Medicina Interna'}</span>
+                <span style={{ margin: '0 6px', opacity: 0.6 }}>•</span>
+                <span style={{ opacity: 0.85 }}>{usuarioActual?.unidadDeSalud || 'Hospital Escuela Manolo Morales'}</span>
+                <span style={{ opacity: 0.7 }}> (SILAIS {usuarioActual?.silais || 'Managua'})</span>
               </div>
             </div>
           </div>
         </div>
 
         <Stethoscope
-          size={160}
+          size={180}
           style={{
             position: 'absolute',
-            right: '-25px',
-            bottom: '-35px',
-            opacity: 0.12,
+            right: '-30px',
+            bottom: '-45px',
+            opacity: 0.08,
             pointerEvents: 'none',
             color: '#FFFFFF',
           }}
@@ -155,195 +153,189 @@ export default function DoctorDashboardPage() {
         />
       </div>
 
-      {/* Demo Cohort Simulation Quick Loader Banner */}
-      {!esModoDemo && totalPacientes <= 1 && (
-        <Card
-          style={{
-            backgroundColor: 'rgba(14, 165, 233, 0.08)',
-            border: '1px solid rgba(14, 165, 233, 0.3)',
-            marginBottom: 0,
-            padding: '16px 20px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '220px', flex: '1 1 auto' }}>
-              <div
-                style={{
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '12px',
-                  backgroundColor: 'rgba(14, 165, 233, 0.2)',
-                  color: 'var(--color-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                <Sparkles size={20} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'var(--color-text)' }}>
-                  Modo de Evaluación Clínica Institucional
-                </h3>
-                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                  Cargá una cohorte de 5 pacientes de prueba con curvas febriles y alertas activas para demostración.
-                </p>
-              </div>
-            </div>
-
-            <Button variante="primario" onClick={cargarDatosDemo} style={{ minHeight: '40px', flexShrink: 0 }}>
-              <Sparkles size={16} />
-              <span>Cargar Datos Demo</span>
-            </Button>
-          </div>
-        </Card>
-      )}
-
-      {esModoDemo && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', backgroundColor: 'rgba(56, 189, 248, 0.1)', borderRadius: '12px', border: '1px solid rgba(56, 189, 248, 0.2)', flexWrap: 'wrap', gap: '8px' }}>
-          <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Sparkles size={15} /> Simulación activa: 5 Pacientes ficticios cargados
-          </span>
-          <button
-            type="button"
-            onClick={limpiarDatosDemo}
-            style={{ background: 'transparent', border: 'none', color: 'var(--color-text-muted)', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-          >
-            <RotateCcw size={12} /> Restablecer
-          </button>
-        </div>
-      )}
-
       {/* KPI Stats Grid (4 Cards Row on Tablet, 2x2 on Mobile) */}
       <div className="grid-responsive-4col">
-        <Card style={{ padding: '14px 12px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: 'var(--color-primary)', marginBottom: '4px' }}>
-            <Users size={16} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Pacientes</span>
+        <div className="kpi-card kpi-card--primary">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: '#38BDF8', letterSpacing: '0.05em' }}>
+              Pacientes
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38BDF8' }}>
+              <Users size={18} />
+            </div>
           </div>
-          <div style={{ fontSize: '1.625rem', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
-            {totalPacientes}
+          <div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--color-text)', fontFamily: 'var(--font-mono)' }}>
+              {totalPacientes}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px', fontWeight: 600 }}>
+              En expediente activo
+            </div>
           </div>
-        </Card>
+        </div>
 
-        <Card style={{ padding: '14px 12px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: 'var(--color-orange)', marginBottom: '4px' }}>
-            <Bell size={16} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Alertas</span>
+        <div className="kpi-card kpi-card--orange">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-orange)', letterSpacing: '0.05em' }}>
+              Alertas
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(249, 115, 22, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-orange)' }}>
+              <Bell size={18} />
+            </div>
           </div>
-          <div style={{ fontSize: '1.625rem', fontWeight: 900, color: 'var(--color-orange)', fontFamily: 'var(--font-mono)' }}>
-            {alertasCriticas.length}
+          <div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--color-orange)', fontFamily: 'var(--font-mono)' }}>
+              {alertasCriticas.length}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px', fontWeight: 600 }}>
+              Requieren atención
+            </div>
           </div>
-        </Card>
+        </div>
 
-        <Card style={{ padding: '14px 12px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: 'var(--color-warning)', marginBottom: '4px' }}>
-            <Clock size={16} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Fase Crítica</span>
+        <div className="kpi-card kpi-card--warning">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-warning)', letterSpacing: '0.05em' }}>
+              Fase Crítica
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(245, 158, 11, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-warning)' }}>
+              <Clock size={18} />
+            </div>
           </div>
-          <div style={{ fontSize: '1.625rem', fontWeight: 900, color: 'var(--color-warning)', fontFamily: 'var(--font-mono)' }}>
-            {enFaseCritica}
+          <div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--color-warning)', fontFamily: 'var(--font-mono)' }}>
+              {enFaseCritica}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px', fontWeight: 600 }}>
+              Días 3-6 de evolución
+            </div>
           </div>
-        </Card>
+        </div>
 
-        <Card style={{ padding: '14px 12px', textAlign: 'center', marginBottom: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: 'var(--color-danger)', marginBottom: '4px' }}>
-            <AlertTriangle size={16} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Casos Graves</span>
+        <div className="kpi-card kpi-card--danger">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-danger)', letterSpacing: '0.05em' }}>
+              Casos Graves
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', backgroundColor: 'rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-danger)' }}>
+              <AlertTriangle size={18} />
+            </div>
           </div>
-          <div style={{ fontSize: '1.625rem', fontWeight: 900, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
-            {pacientesGrave}
+          <div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
+              {pacientesGrave}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px', fontWeight: 600 }}>
+              Prioridad de Triaje
+            </div>
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* Clinical Epidemiological Breakdown (2 Columns on Tablet) */}
       <div className="grid-responsive-2col">
         {/* WHO Clinical Phases Widget */}
-        <Card style={{ marginBottom: 0, backgroundColor: 'var(--color-surface-1)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <Activity size={18} style={{ color: 'var(--color-primary)' }} />
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 800 }}>
-              Distribución por Fases Clínicas OMS
-            </h3>
+        <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '22px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)' }}>
+              <Activity size={20} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                Distribución por Fases OMS
+              </h3>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                Evolución de síntomas por cohorte
+              </p>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, marginBottom: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
                 <span style={{ color: '#38BDF8' }}>Fase Febril (Días 1-2)</span>
-                <span>{enFaseFebril} pacientes</span>
+                <span style={{ color: 'var(--color-text)' }}>{enFaseFebril} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
               </div>
-              <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--color-surface-0)', borderRadius: '999px', overflow: 'hidden' }}>
-                <div style={{ width: `${totalPacientes ? (enFaseFebril / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: '#38BDF8', transition: 'width 300ms ease' }} />
+              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ width: `${totalPacientes ? (enFaseFebril / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: '#38BDF8', transition: 'width 300ms ease', borderRadius: '999px' }} />
               </div>
             </div>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, marginBottom: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
                 <span style={{ color: 'var(--color-orange)' }}>⚠️ Fase Crítica (Días 3-6)</span>
-                <span>{enFaseCritica} pacientes</span>
+                <span style={{ color: 'var(--color-text)' }}>{enFaseCritica} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
               </div>
-              <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--color-surface-0)', borderRadius: '999px', overflow: 'hidden' }}>
-                <div style={{ width: `${totalPacientes ? (enFaseCritica / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-orange)', transition: 'width 300ms ease' }} />
+              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ width: `${totalPacientes ? (enFaseCritica / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-orange)', transition: 'width 300ms ease', borderRadius: '999px' }} />
               </div>
             </div>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, marginBottom: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
                 <span style={{ color: 'var(--color-success)' }}>Fase Recuperación (Día 7+)</span>
-                <span>{enFaseRecuperacion} pacientes</span>
+                <span style={{ color: 'var(--color-text)' }}>{enFaseRecuperacion} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
               </div>
-              <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--color-surface-0)', borderRadius: '999px', overflow: 'hidden' }}>
-                <div style={{ width: `${totalPacientes ? (enFaseRecuperacion / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-success)', transition: 'width 300ms ease' }} />
+              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ width: `${totalPacientes ? (enFaseRecuperacion / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-success)', transition: 'width 300ms ease', borderRadius: '999px' }} />
               </div>
             </div>
           </div>
         </Card>
 
         {/* Triage Risk Classification Widget */}
-        <Card style={{ marginBottom: 0, backgroundColor: 'var(--color-surface-1)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <PieChart size={18} style={{ color: 'var(--color-primary)' }} />
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 800 }}>
-              Clasificación Epidemiológica MINSA
-            </h3>
+        <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '22px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)' }}>
+              <PieChart size={20} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                Clasificación Epidemiológica MINSA
+              </h3>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                Categorización según guía nacional
+              </p>
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '10px' }}>
-            <div style={{ padding: '10px', borderRadius: '10px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: 'var(--color-danger)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-danger)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }} />
                 DENGUE GRAVE
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-danger)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-danger)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
                 {pacientesGrave}
               </div>
             </div>
 
-            <div style={{ padding: '10px', borderRadius: '10px', backgroundColor: 'rgba(249, 115, 22, 0.08)', border: '1px solid rgba(249, 115, 22, 0.2)' }}>
-              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: 'var(--color-orange)' }}>
+            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(249, 115, 22, 0.08)', border: '1px solid rgba(249, 115, 22, 0.25)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-orange)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-orange)' }} />
                 SIGNOS ALARMA
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-orange)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-orange)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
                 {pacientesAlarma}
               </div>
             </div>
 
-            <div style={{ padding: '10px', borderRadius: '10px', backgroundColor: 'rgba(234, 179, 8, 0.08)', border: '1px solid rgba(234, 179, 8, 0.2)' }}>
-              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: 'var(--color-warning)' }}>
+            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(234, 179, 8, 0.08)', border: '1px solid rgba(234, 179, 8, 0.25)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-warning)' }} />
                 DENGUE POSIBLE
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-warning)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-warning)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
                 {pacientesPosible}
               </div>
             </div>
 
-            <div style={{ padding: '10px', borderRadius: '10px', backgroundColor: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
-              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: 'var(--color-success)' }}>
+            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.25)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-success)' }} />
                 BAJO RIESGO
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--color-success)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-success)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
                 {pacientesBajoRiesgo}
               </div>
             </div>
@@ -353,21 +345,21 @@ export default function DoctorDashboardPage() {
 
       {/* Critical Alerts Feed */}
       {alertasCriticas.length > 0 && (
-        <Card style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.25)', marginBottom: 0 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-danger)' }}>
-              <Bell size={18} className="pulso-alerta" />
-              <h3 style={{ fontSize: '0.9375rem', fontWeight: 800 }}>
+        <Card style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.25)', padding: '20px 22px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-danger)' }}>
+              <Bell size={20} className="pulso-alerta" />
+              <h3 style={{ fontSize: '1rem', fontWeight: 800 }}>
                 Alertas Médicas Activas ({alertasCriticas.length})
               </h3>
             </div>
 
             <Link href="/alertas" style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--color-primary)', textDecoration: 'none' }}>
-              Ver todas
+              Ver todas →
             </Link>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {alertasCriticas.slice(0, 2).map((alerta) => (
               <div
                 key={alerta.id}
@@ -375,26 +367,27 @@ export default function DoctorDashboardPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '12px',
-                  backgroundColor: 'var(--color-surface-1)',
-                  borderRadius: '12px',
+                  padding: '14px 16px',
+                  backgroundColor: 'var(--color-surface-0)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '14px',
                   flexWrap: 'wrap',
-                  gap: '8px',
+                  gap: '10px',
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 700, marginBottom: '2px' }}>
+                  <div style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '3px' }}>
                     {alerta.pacienteNombre}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-danger)', fontWeight: 600 }}>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--color-danger)', fontWeight: 600 }}>
                     {alerta.sintomasCriticos.slice(0, 2).join(', ')}
                   </div>
                 </div>
 
                 <Link href={`/pacientes/${alerta.pacienteId}`} style={{ textDecoration: 'none', marginLeft: 'auto' }}>
-                  <Button variante="peligro" style={{ minHeight: '36px', padding: '0 12px', fontSize: '0.8125rem' }}>
+                  <Button variante="peligro" style={{ minHeight: '38px', padding: '0 14px', fontSize: '0.8125rem' }}>
                     <span>Atender</span>
-                    <ArrowRight size={14} />
+                    <ArrowRight size={15} />
                   </Button>
                 </Link>
               </div>
@@ -404,14 +397,14 @@ export default function DoctorDashboardPage() {
       )}
 
       {/* Doctor-Patient Linkage Code Quick Action Banner */}
-      <Card style={{ backgroundColor: 'var(--color-surface-1)', marginBottom: 0, padding: '18px 20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '200px', flex: '1 1 auto' }}>
+      <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '22px 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '220px', flex: '1 1 auto' }}>
             <div
               style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '12px',
+                width: '46px',
+                height: '46px',
+                borderRadius: '14px',
                 backgroundColor: 'var(--color-primary-soft)',
                 color: 'var(--color-primary)',
                 display: 'flex',
@@ -420,37 +413,28 @@ export default function DoctorDashboardPage() {
                 flexShrink: 0,
               }}
             >
-              <Key size={20} />
+              <Key size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'var(--color-text)' }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
                 Código para Vincular Paciente
               </h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '3px' }}>
                 Dictá este código de 6 dígitos al paciente en tu consulta para vincular su expediente.
               </p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: 'auto', flexWrap: 'wrap' }}>
-            <div
-              style={{
-                padding: '10px 18px',
-                backgroundColor: 'var(--color-surface-0)',
-                border: '1px solid var(--color-border)',
-                borderRadius: '12px',
-                fontSize: 'clamp(1.125rem, 3.5vw, 1.375rem)',
-                fontWeight: 900,
-                letterSpacing: '0.25em',
-                textAlign: 'center',
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--color-primary)',
-              }}
-            >
-              {codigoVinculacionActual || 'A3F7K2'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+              {(codigoVinculacionActual || 'A3F7K2').split('').map((char, index) => (
+                <span key={index} className="digit-box">
+                  {char}
+                </span>
+              ))}
             </div>
 
-            <Button variante="secundario" onClick={generarCodigoVinculacion} style={{ minHeight: '44px', flexShrink: 0 }}>
+            <Button variante="secundario" onClick={generarCodigoVinculacion} style={{ minHeight: '44px', padding: '0 16px', flexShrink: 0 }}>
               <Plus size={16} />
               <span>Nuevo</span>
             </Button>
@@ -459,14 +443,21 @@ export default function DoctorDashboardPage() {
       </Card>
 
       {/* Patient Triage Section (Full Width Grid) */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text)' }}>
-            <Activity size={20} style={{ color: 'var(--color-primary)' }} />
-            <span>Triaje Clínico de Pacientes</span>
-          </h3>
-          <Link href="/pacientes" style={{ fontSize: '0.8125rem', color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>
-            Directorio completo →
+      <div style={{ marginTop: '8px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-text)' }}>
+              <Activity size={22} style={{ color: 'var(--color-primary)' }} />
+              <span>Triaje Clínico de Pacientes</span>
+            </h3>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+              Pacientes ordenados por prioridad de atención médica
+            </p>
+          </div>
+
+          <Link href="/pacientes" style={{ fontSize: '0.875rem', color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span>Directorio completo</span>
+            <ArrowRight size={16} />
           </Link>
         </div>
 

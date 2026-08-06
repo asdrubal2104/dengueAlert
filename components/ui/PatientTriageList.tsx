@@ -68,39 +68,54 @@ export function PatientTriageList({ pacientes, registros }: PatientTriageListPro
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px',
-                padding: '16px',
+                gap: '16px',
+                padding: '20px',
+                backgroundColor: 'var(--color-surface-0)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '20px',
               }}
             >
               {/* Card Top Row: Badge & Temperature Trend */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 {evaluacionReciente && <Badge tipo={clasificacion} />}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                      Tendencia Temp.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: 'auto' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      backgroundColor: 'rgba(15, 23, 42, 0.6)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
+                    }}
+                  >
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Tendencia Temp
+                      </div>
+                      <SparklineChart data={mockFiebreTrend} color={chartColor} width={68} height={20} />
                     </div>
-                    <SparklineChart data={mockFiebreTrend} color={chartColor} width={65} height={22} />
                   </div>
                   <ChevronRight size={18} style={{ color: 'var(--color-text-muted)' }} />
                 </div>
               </div>
 
               {/* Card Body: Avatar & Full Patient Name */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <div
                   style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '12px',
-                    backgroundColor: 'var(--color-surface-1)',
+                    width: '46px',
+                    height: '46px',
+                    borderRadius: '14px',
+                    backgroundColor: 'rgba(14, 165, 233, 0.12)',
                     color: 'var(--color-primary)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: 800,
-                    fontSize: '1rem',
-                    border: '1px solid var(--color-border)',
+                    fontSize: '1.125rem',
+                    border: '1px solid rgba(14, 165, 233, 0.3)',
                     flexShrink: 0,
                   }}
                 >
@@ -108,16 +123,22 @@ export function PatientTriageList({ pacientes, registros }: PatientTriageListPro
                 </div>
 
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <h4 style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1.25, marginBottom: '4px' }}>
+                  <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1.3, marginBottom: '6px' }}>
                     {paciente.nombreCompleto}
                   </h4>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                      <MapPin size={12} style={{ color: 'var(--color-primary)' }} /> {paciente.departamento || 'Managua'}
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--color-text-secondary)' }}>
+                      <MapPin size={13} style={{ color: 'var(--color-primary)' }} /> {paciente.departamento || 'Managua'}
                     </span>
-                    <span>•</span>
-                    <span>Sangre: {paciente.tipoSangre || 'O+'}</span>
-                    {paciente.pesoKg && <span>• {paciente.pesoKg}kg</span>}
+                    <span style={{ color: 'var(--color-border)' }}>•</span>
+                    <span style={{ backgroundColor: 'var(--color-surface-1)', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, border: '1px solid var(--color-border)' }}>
+                      Sangre {paciente.tipoSangre || 'O+'}
+                    </span>
+                    {paciente.pesoKg && (
+                      <span style={{ backgroundColor: 'var(--color-surface-1)', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, border: '1px solid var(--color-border)' }}>
+                        {paciente.pesoKg} kg
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

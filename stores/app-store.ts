@@ -7,22 +7,6 @@ import { DEMO_PACIENTES, DEMO_REGISTROS, DEMO_ALERTAS } from '@/lib/demo/datos-d
 import { enviarNotificacionAlerta } from '@/lib/notificaciones/web-push';
 import { guardarEvaluacionSupabase } from '@/lib/supabase/services';
 
-// Datos de semilla para demostración inmediata
-const MOCK_PACIENTE: PerfilUsuario = {
-  id: 'paciente-demo-1',
-  email: 'paciente@ejemplo.com',
-  nombreCompleto: 'Natalia Elizabeth López',
-  rol: 'PACIENTE',
-  fechaNacimiento: '1995-06-15',
-  departamento: 'Managua',
-  telefono: '+505 8888 1234',
-  tipoSangre: 'O+',
-  pesoKg: 62,
-  enfermedadesCronicas: ['Hipertensión arterial'],
-  medicamentosActuales: 'Losartán 50mg',
-  fechaRegistro: new Date().toISOString(),
-};
-
 const MOCK_MEDICO: PerfilUsuario = {
   id: 'medico-demo-1',
   email: 'dr.perez@minsa.gob.ni',
@@ -35,20 +19,6 @@ const MOCK_MEDICO: PerfilUsuario = {
   telefono: '+505 8999 5678',
   fechaRegistro: new Date().toISOString(),
 };
-
-const MOCK_REGISTROS: RegistroSintomas[] = [
-  {
-    id: 'reg-1',
-    pacienteId: 'paciente-demo-1',
-    pacienteNombre: 'Natalia Elizabeth López',
-    fechaRegistro: new Date(Date.now() - 86400000 * 2).toISOString(),
-    diasConSintomas: 2,
-    sintomasIds: ['S01', 'S02', 'S04'],
-    clasificacion: 'DENGUE_POSIBLE',
-    riskScore: 18,
-    notas: 'Fiebre inicio hace 2 días. Toma acetaminofén 500mg.',
-  },
-];
 
 interface AppState {
   usuarioActual: PerfilUsuario | null;
@@ -81,9 +51,9 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      usuarioActual: MOCK_PACIENTE, // Inicia con paciente demo por defecto
-      registros: MOCK_REGISTROS,
-      alertas: [],
+      usuarioActual: DEMO_PACIENTES[0], // Inicia con paciente demo por defecto (Natalia Elena López Martínez)
+      registros: DEMO_REGISTROS,
+      alertas: DEMO_ALERTAS,
       codigoVinculacionActual: 'A3F7K2',
       medicosVinculados: [
         {
@@ -93,32 +63,32 @@ export const useAppStore = create<AppState>()(
           hospital: 'Hospital Manolo Morales',
         },
       ],
-      pacientesVinculados: [MOCK_PACIENTE],
-      esModoDemo: false,
+      pacientesVinculados: DEMO_PACIENTES,
+      esModoDemo: true,
 
       setUsuarioActual: (usuario) => set({ usuarioActual: usuario }),
 
       cargarDatosDemo: () => {
         set({
           pacientesVinculados: DEMO_PACIENTES,
-          registros: [...DEMO_REGISTROS, ...get().registros],
-          alertas: [...DEMO_ALERTAS, ...get().alertas],
+          registros: DEMO_REGISTROS,
+          alertas: DEMO_ALERTAS,
           esModoDemo: true,
         });
       },
 
       limpiarDatosDemo: () => {
         set({
-          pacientesVinculados: [MOCK_PACIENTE],
-          registros: MOCK_REGISTROS,
-          alertas: [],
-          esModoDemo: false,
+          pacientesVinculados: DEMO_PACIENTES,
+          registros: DEMO_REGISTROS,
+          alertas: DEMO_ALERTAS,
+          esModoDemo: true,
         });
       },
 
       iniciarSesionDemo: (rol) => {
         if (rol === 'PACIENTE') {
-          set({ usuarioActual: MOCK_PACIENTE });
+          set({ usuarioActual: DEMO_PACIENTES[0] });
         } else {
           set({ usuarioActual: MOCK_MEDICO });
         }
@@ -243,6 +213,19 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'dengue-alert-store',
+      version: 2,
+      migrate: (persistedState: any, version: number) => {
+        if (version < 2) {
+          return {
+            ...(persistedState || {}),
+            pacientesVinculados: DEMO_PACIENTES,
+            registros: DEMO_REGISTROS,
+            alertas: DEMO_ALERTAS,
+            esModoDemo: true,
+          };
+        }
+        return persistedState as AppState;
+      },
     },
   ),
 );
