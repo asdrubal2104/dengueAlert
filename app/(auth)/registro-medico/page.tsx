@@ -215,7 +215,7 @@ export default function RegistroMedicoPage() {
 
               <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
 
-              <Button type="submit" variante="primario" tamano="grande" disabled={cargando} style={{ marginTop: '8px', width: '100%' }}>
+              <Button type="submit" variante="primario" tamano="grande" disabled={cargando || !captchaTokenState} style={{ marginTop: '8px', width: '100%' }}>
                 <span>{cargando ? 'Registrando...' : 'Registrarme como Médico'}</span>
                 <CheckCircle2 size={18} />
               </Button>

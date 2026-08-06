@@ -16,6 +16,7 @@ import {
   ShieldAlert,
   Sparkles,
 } from 'lucide-react';
+import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
+  const [captchaTokenState, setCaptchaTokenState] = useState<string | undefined>(undefined);
 
   const handleLoginPaciente = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,8 +37,13 @@ export default function LoginPage() {
       return;
     }
 
+    if (!captchaTokenState) {
+      setError('Por favor, completa la verificación de seguridad (Captcha).');
+      return;
+    }
+
     setCargando(true);
-    const res = await iniciarSesionSupabase(email, password);
+    const res = await iniciarSesionSupabase(email, password, captchaTokenState);
     setCargando(false);
 
     if (res.ok && res.usuario) {
@@ -172,11 +179,13 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
+              <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
+
               <Button
                 variante="primario"
                 tamano="grande"
                 type="submit"
-                disabled={cargando}
+                disabled={cargando || !captchaTokenState}
                 style={{ width: '100%', marginTop: '4px' }}
               >
                 <span>{cargando ? 'Ingresando...' : 'Ingresar al Sistema'}</span>

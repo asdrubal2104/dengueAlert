@@ -233,7 +233,7 @@ export default function RegistroPacientePage() {
                     <span>Atrás</span>
                   </Button>
 
-                  <Button type="submit" variante="primario" disabled={cargando} style={{ flex: 2 }}>
+                  <Button type="submit" variante="primario" disabled={cargando || !captchaTokenState} style={{ flex: 2 }}>
                     <span>{cargando ? 'Creando...' : 'Crear Cuenta'}</span>
                     <CheckCircle2 size={18} />
                   </Button>
