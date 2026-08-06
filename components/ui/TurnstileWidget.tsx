@@ -12,6 +12,12 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
   const containerRef = useRef<HTMLDivElement>(null);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
+  // Use refs for callbacks to prevent useEffect re-running when inline functions change on parent render
+  const callbacksRef = useRef({ onSuccess, onError, onExpire });
+  useEffect(() => {
+    callbacksRef.current = { onSuccess, onError, onExpire };
+  });
+
   useEffect(() => {
     if (!siteKey || !containerRef.current) return;
 
@@ -23,9 +29,9 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
         try {
           widgetId = window.turnstile.render(containerRef.current, {
             sitekey: siteKey,
-            callback: (token: string) => onSuccess(token),
-            'error-callback': () => onError && onError(),
-            'expired-callback': () => onExpire && onExpire(),
+            callback: (token: string) => callbacksRef.current.onSuccess(token),
+            'error-callback': () => callbacksRef.current.onError?.(),
+            'expired-callback': () => callbacksRef.current.onExpire?.(),
           });
         } catch (e) {
           console.error('Error rendering Turnstile widget:', e);
@@ -49,7 +55,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
         window.turnstile.remove(widgetId);
       }
     };
-  }, [siteKey, onSuccess, onError, onExpire]);
+  }, [siteKey]);
 
   if (!siteKey) {
     return (
@@ -61,3 +67,4 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
 
   return <div ref={containerRef} style={{ display: 'flex', justifyContent: 'center', margin: '12px 0' }} />;
 };
+
