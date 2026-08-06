@@ -19,11 +19,11 @@ export const Badge: React.FC<BadgeProps> = ({ tipo, clasificacion, texto, classN
       case 'DENGUE_POSIBLE':
         return { icon: <Activity size={14} />, text: 'Sin Signos de Alarma' };
       case 'CONSULTA_MEDICA':
-        return { icon: <Activity size={14} />, text: 'Consulta Médica' };
+        return { icon: <Activity size={14} />, text: 'Consulta Médica Requerida' };
       case 'DENGUE_ALARMA':
-        return { icon: <AlertTriangle size={14} />, text: 'Con Signos de Alarma' };
+        return { icon: <AlertTriangle size={14} />, text: 'Sospecha con Signos de Alarma' };
       case 'DENGUE_GRAVE':
-        return { icon: <ShieldAlert size={14} />, text: '¡Dengue Grave!' };
+        return { icon: <ShieldAlert size={14} />, text: 'Sospecha de Cuadro Grave' };
       default:
         return { icon: null, text: String(t) };
     }

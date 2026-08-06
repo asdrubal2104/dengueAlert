@@ -179,13 +179,13 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
         </div>
 
         <h1 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
-          {esGrave ? '¡EMERGENCIA MÉDICA GRAVE!' : '¡ATENCIÓN: SIGNOS DE ALARMA!'}
+          {esGrave ? '¡EMERGENCIA MÉDICA: SÍNTOMAS GRAVES!' : '¡ATENCIÓN: SIGNOS DE ALARMA!'}
         </h1>
 
         <p style={{ fontSize: '0.8125rem', opacity: 0.95, lineHeight: 1.35, marginBottom: '10px', color: '#FFF' }}>
           {esGrave
-            ? 'Presentás signos de dengue grave. Acudí INMEDIATAMENTE a un centro de salud u hospital.'
-            : 'Se detectaron signos de alarma que indican riesgo de complicación. Necesitás atención médica hoy.'}
+            ? 'Presentás síntomas compatibles con sospecha de dengue grave. Acudí INMEDIATAMENTE a un centro de salud u hospital.'
+            : 'Se detectaron signos de alarma que indican riesgo de complicación. Necesitás valoración médica presencial hoy.'}
         </p>
 
         {sintomasCriticos.length > 0 && (

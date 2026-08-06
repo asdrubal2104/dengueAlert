@@ -21,7 +21,7 @@ describe('AlertOverlay — Componente de Emergencia UI', () => {
       />
     );
 
-    expect(screen.getByText('¡EMERGENCIA MÉDICA GRAVE!')).toBeInTheDocument();
+    expect(screen.getByText('¡EMERGENCIA MÉDICA: SÍNTOMAS GRAVES!')).toBeInTheDocument();
     expect(screen.getByText('Dificultad para respirar')).toBeInTheDocument();
     expect(screen.getByText('Sangrado de encías')).toBeInTheDocument();
   });
