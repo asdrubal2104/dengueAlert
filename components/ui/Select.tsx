@@ -168,11 +168,9 @@ export const Select: React.FC<SelectProps> = ({
             className="bottom-sheet-panel"
             style={{
               width: '100%',
-              maxWidth: '560px',
+              maxWidth: '520px',
               maxHeight: '82vh',
               backgroundColor: '#172136',
-              borderTopLeftRadius: '28px',
-              borderTopRightRadius: '28px',
               borderTop: '1px solid rgba(148, 163, 184, 0.25)',
               borderLeft: '1px solid rgba(148, 163, 184, 0.12)',
               borderRight: '1px solid rgba(148, 163, 184, 0.12)',
@@ -190,13 +188,13 @@ export const Select: React.FC<SelectProps> = ({
             aria-modal="true"
             aria-label={labelText || 'Seleccionar opción'}
           >
-            {/* Drag Handle Bar with Touch Gesture */}
+            {/* Drag Handle Bar with Touch Gesture (Mobile Only) */}
             <div
+              className="bottom-sheet-drag-handle"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
               style={{
-                display: 'flex',
                 justifyContent: 'center',
                 paddingTop: '14px',
                 paddingBottom: '8px',
