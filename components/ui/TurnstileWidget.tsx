@@ -1,6 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+
+export interface TurnstileWidgetHandle {
+  reset: () => void;
+}
 
 interface TurnstileWidgetProps {
   onSuccess: (token: string) => void;
@@ -8,10 +12,20 @@ interface TurnstileWidgetProps {
   onExpire?: () => void;
 }
 
-export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onError, onExpire }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const [loadError, setLoadError] = useState(false);
+export const TurnstileWidget = forwardRef<TurnstileWidgetHandle, TurnstileWidgetProps>(
+  ({ onSuccess, onError, onExpire }, ref) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    const [loadError, setLoadError] = useState(false);
+    const widgetIdRef = useRef<string | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      reset: () => {
+        if (widgetIdRef.current && window.turnstile?.reset) {
+          window.turnstile.reset(widgetIdRef.current);
+        }
+      }
+    }));
 
   // Preserve callbacks in ref to avoid re-running effect on inline function prop changes
   const callbacksRef = useRef({ onSuccess, onError, onExpire });
@@ -23,12 +37,10 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
     if (!siteKey) return;
 
     const scriptId = 'cloudflare-turnstile-script';
-    let widgetId: string | null = null;
     let checkInterval: NodeJS.Timeout | null = null;
     let isCancelled = false;
-
     const renderWidget = () => {
-      if (isCancelled || !containerRef.current || widgetId) return;
+      if (isCancelled || !containerRef.current || widgetIdRef.current) return;
 
       if (window.turnstile) {
         try {
@@ -37,7 +49,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
             containerRef.current.innerHTML = '';
           }
 
-          widgetId = window.turnstile.render(containerRef.current, {
+          widgetIdRef.current = window.turnstile.render(containerRef.current, {
             sitekey: siteKey,
             callback: (token: string) => {
               if (!isCancelled) callbacksRef.current.onSuccess(token);
@@ -48,8 +60,8 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
             'expired-callback': () => {
               if (!isCancelled) {
                 callbacksRef.current.onExpire?.();
-                if (widgetId && window.turnstile?.reset) {
-                  window.turnstile.reset(widgetId);
+                if (widgetIdRef.current && window.turnstile?.reset) {
+                  window.turnstile.reset(widgetIdRef.current);
                 }
               }
             },
@@ -88,7 +100,7 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
     let attempts = 0;
     checkInterval = setInterval(() => {
       attempts++;
-      if (window.turnstile && containerRef.current && !widgetId) {
+      if (window.turnstile && containerRef.current && !widgetIdRef.current) {
         renderWidget();
       }
       if (attempts > 50) { // 5 seconds max
@@ -102,9 +114,9 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
       if (existingScript) {
         existingScript.removeEventListener('load', renderWidget);
       }
-      if (widgetId && window.turnstile?.remove) {
+      if (widgetIdRef.current && window.turnstile?.remove) {
         try {
-          window.turnstile.remove(widgetId);
+          window.turnstile.remove(widgetIdRef.current);
         } catch {
           // Ignore removal error on unmount
         }
@@ -140,6 +152,6 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
       }}
     />
   );
-};
+});
 
-
+TurnstileWidget.displayName = 'TurnstileWidget';

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/stores/app-store';
@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/Card';
 import { DEPARTAMENTOS_NICARAGUA, RegistroPacienteSchema } from '@/lib/validators/auth';
 import { DepartamentoNicaragua } from '@/types/nicaragua';
 import { registrarPacienteSupabase } from '@/lib/supabase/services';
-import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
+import { TurnstileWidget, TurnstileWidgetHandle } from '@/components/ui/TurnstileWidget';
 import { PasswordStrengthMeter } from '@/components/ui/PasswordStrengthMeter';
 import { ArrowLeft, ArrowRight, CheckCircle2, User } from 'lucide-react';
 
@@ -27,6 +27,7 @@ export default function RegistroPacientePage() {
   const [departamento, setDepartamento] = useState<DepartamentoNicaragua>('Managua');
   const [error, setError] = useState<string | null>(null);
   const [captchaTokenState, setCaptchaTokenState] = useState<string | undefined>(undefined);
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
 
   const handleSiguientePaso1 = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,6 +88,8 @@ export default function RegistroPacientePage() {
     } else {
       // Fallback si Supabase no responde o falla
       setError(res.error || 'Error al conectar con Supabase');
+      setCaptchaTokenState(undefined);
+      turnstileRef.current?.reset();
     }
   };
 
@@ -222,6 +225,7 @@ export default function RegistroPacientePage() {
                 />
 
                 <TurnstileWidget
+                  ref={turnstileRef}
                   onSuccess={(token) => setCaptchaTokenState(token)}
                   onExpire={() => setCaptchaTokenState(undefined)}
                   onError={() => setCaptchaTokenState(undefined)}

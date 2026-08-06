@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
@@ -16,7 +16,7 @@ import {
   ShieldAlert,
   Sparkles,
 } from 'lucide-react';
-import { TurnstileWidget } from '@/components/ui/TurnstileWidget';
+import { TurnstileWidget, TurnstileWidgetHandle } from '@/components/ui/TurnstileWidget';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,6 +27,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
   const [captchaTokenState, setCaptchaTokenState] = useState<string | undefined>(undefined);
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
 
   const handleLoginPaciente = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +56,8 @@ export default function LoginPage() {
       }
     } else {
       setError(res.error || 'Credenciales inválidas o error de conexión');
+      setCaptchaTokenState(undefined);
+      turnstileRef.current?.reset();
     }
   };
 
@@ -180,6 +183,7 @@ export default function LoginPage() {
               />
 
               <TurnstileWidget
+                ref={turnstileRef}
                 onSuccess={(token) => setCaptchaTokenState(token)}
                 onExpire={() => setCaptchaTokenState(undefined)}
                 onError={() => setCaptchaTokenState(undefined)}
