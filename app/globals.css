@@ -164,6 +164,12 @@ body {
   gap: var(--space-3);
 }
 
+.grid-responsive-4col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
 /* Tablet & Large Screen Responsiveness (>= 768px) */
 @media (min-width: 768px) {
   .contenido-principal {
@@ -177,6 +183,12 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-6);
     align-items: start;
+  }
+
+  .grid-responsive-4col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
   }
 
   .grid-acciones-tablet {

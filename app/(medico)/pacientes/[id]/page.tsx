@@ -18,6 +18,8 @@ import {
   AlertTriangle,
   Activity,
   FileText,
+  User,
+  Pill,
 } from 'lucide-react';
 
 export default function DetallePacientePage({ params }: { params: { id: string } }) {
@@ -48,17 +50,19 @@ export default function DetallePacientePage({ params }: { params: { id: string }
 
   const handleGuardarNota = (e: React.FormEvent) => {
     e.preventDefault();
-    if (ultimaEval) {
-      agregarNotaMedica(ultimaEval.id, notaMedica);
+    if (ultimaEval && notaMedica.trim()) {
+      agregarNotaMedica(ultimaEval.id, notaMedica.trim());
+      setNotaGuardada(true);
+      setNotaMedica('');
+      setTimeout(() => setNotaGuardada(false), 3500);
     }
-    setNotaGuardada(true);
-    setTimeout(() => setNotaGuardada(false), 3000);
   };
 
   return (
-    <div className="grid-responsive-2col slide-up">
-      <div className="grid-col-full" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <Link href="/pacientes" style={{ color: 'var(--color-text-secondary)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
+      {/* Top Header Navigation */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <Link href="/pacientes" style={{ color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center' }}>
           <ArrowLeft size={22} />
         </Link>
         <div>
@@ -71,8 +75,8 @@ export default function DetallePacientePage({ params }: { params: { id: string }
         </div>
       </div>
 
-      {/* Patient Header Card */}
-      <Card className="grid-col-full" style={{ padding: '20px' }}>
+      {/* Patient Header Card (Full Width) */}
+      <Card style={{ padding: '20px', marginBottom: 0 }}>
         {/* Card Top Row: ID & Status Badge */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', gap: '8px', flexWrap: 'wrap' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -129,83 +133,100 @@ export default function DetallePacientePage({ params }: { params: { id: string }
         )}
       </Card>
 
-      {/* Clinical Metrics Grid */}
-      <div className="grid-col-full" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-        <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>Sangre</div>
-          <div style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
+      {/* Clinical Metrics Grid (3 Columns) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px', fontWeight: 600 }}>Sangre</div>
+          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
             {paciente.tipoSangre || 'N/A'}
           </div>
         </Card>
 
-        <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>Peso</div>
-          <div style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
+        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px', fontWeight: 600 }}>Peso</div>
+          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
             {paciente.pesoKg ? `${paciente.pesoKg} kg` : 'N/A'}
           </div>
         </Card>
 
-        <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>Riesgo</div>
-          <div style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-warning)', fontFamily: 'var(--font-mono)' }}>
+        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px', fontWeight: 600 }}>Riesgo</div>
+          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-warning)', fontFamily: 'var(--font-mono)' }}>
             {paciente.enfermedadesCronicas?.length ? 'Alto' : 'Normal'}
           </div>
         </Card>
       </div>
 
-      {/* Comorbidity Alert if Present */}
-      {paciente.enfermedadesCronicas && paciente.enfermedadesCronicas.length > 0 && (
-        <Card style={{ backgroundColor: 'var(--color-warning-soft)', border: '1px solid var(--color-warning)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-warning)' }}>
-            <AlertTriangle size={20} />
-            <div>
-              <strong style={{ fontSize: '0.875rem' }}>Comorbilidades reportadas:</strong>
-              <div style={{ fontSize: '0.8125rem', marginTop: '2px', color: 'var(--color-text)' }}>
-                {paciente.enfermedadesCronicas.join(', ')}
+      {/* Clinical Operations Panel (2 Columns on Tablet, 1 on Mobile) */}
+      <div className="grid-responsive-2col">
+        {/* Patient Antecedents & Clinical Profile Card */}
+        <Card style={{ marginBottom: 0, backgroundColor: 'var(--color-surface-1)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text)' }}>
+            <User size={18} style={{ color: 'var(--color-primary)' }} />
+            <span>Ficha de Antecedentes Médicos</span>
+          </h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ padding: '10px 12px', borderRadius: '12px', backgroundColor: 'var(--color-surface-0)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <AlertTriangle size={14} /> Comorbilidades Reportadas
+              </div>
+              <div style={{ fontSize: '0.8125rem', marginTop: '4px', color: 'var(--color-text)', fontWeight: 600 }}>
+                {paciente.enfermedadesCronicas?.length ? paciente.enfermedadesCronicas.join(', ') : 'Sin comorbilidades reportadas'}
+              </div>
+            </div>
+
+            <div style={{ padding: '10px 12px', borderRadius: '12px', backgroundColor: 'var(--color-surface-0)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Pill size={14} /> Medicamentos Actuales
+              </div>
+              <div style={{ fontSize: '0.8125rem', marginTop: '4px', color: 'var(--color-text)', fontWeight: 600 }}>
+                {paciente.medicamentosActuales || 'Sin medicamentos continuos registrados'}
               </div>
             </div>
           </div>
         </Card>
-      )}
 
-      {/* Clinical Notes Form */}
-      <Card>
-        <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Activity size={18} style={{ color: 'var(--color-primary)' }} />
-          <span>Agregar Nota de Evolución Médica</span>
-        </h3>
+        {/* Clinical Evolution Notes Form Card */}
+        <Card style={{ marginBottom: 0, backgroundColor: 'var(--color-surface-1)' }}>
+          <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text)' }}>
+            <Activity size={18} style={{ color: 'var(--color-primary)' }} />
+            <span>Agregar Nota de Evolución Médica</span>
+          </h3>
 
-        {notaGuardada && (
-          <div style={{ padding: '10px', backgroundColor: 'var(--color-success-soft)', color: 'var(--color-success)', borderRadius: '10px', fontSize: '0.8125rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <CheckCircle2 size={16} />
-            <span>Nota guardada correctamente en el expediente MINSA.</span>
-          </div>
-        )}
+          {notaGuardada && (
+            <div style={{ padding: '10px', backgroundColor: 'var(--color-success-soft)', color: 'var(--color-success)', borderRadius: '10px', fontSize: '0.8125rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <CheckCircle2 size={16} />
+              <span>Nota guardada correctamente en el expediente MINSA.</span>
+            </div>
+          )}
 
-        <form onSubmit={handleGuardarNota}>
-          <textarea
-            rows={3}
-            value={notaMedica}
-            onChange={(e) => setNotaMedica(e.target.value)}
-            placeholder="Escribí indicaciones sobre hidratación, hemograma o referencia a hospital..."
-            className="input"
-            style={{ padding: '12px', height: 'auto', marginBottom: '12px' }}
-          />
+          <form onSubmit={handleGuardarNota}>
+            <textarea
+              rows={3}
+              value={notaMedica}
+              onChange={(e) => setNotaMedica(e.target.value)}
+              placeholder="Escribí indicaciones sobre hidratación, hemograma o referencia a hospital..."
+              className="input"
+              style={{ padding: '12px', height: 'auto', marginBottom: '12px', resize: 'none' }}
+            />
 
-          <Button variante="primario" type="submit" style={{ width: '100%' }}>
-            <Save size={16} />
-            <span>Guardar Nota Médica</span>
-          </Button>
-        </form>
-      </Card>
+            <Button variante="primario" type="submit" style={{ width: '100%', minHeight: '44px' }}>
+              <Save size={16} />
+              <span>Guardar Nota Médica</span>
+            </Button>
+          </form>
+        </Card>
+      </div>
 
-      {/* Evaluations Timeline */}
+      {/* Evaluations Timeline (Full Width Section) */}
       <div>
-        <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '12px' }}>
-          Historial de Evaluaciones ({registros.length})
+        <h3 style={{ fontSize: '1.125rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Clock size={18} style={{ color: 'var(--color-primary)' }} />
+          <span>Historial de Evaluaciones ({registros.length})</span>
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="grid-listas">
           {registros.map((r, i) => {
             const fecha = new Date(r.fechaRegistro);
             const fechaFormateada = fecha.toLocaleDateString('es-NI', {
@@ -221,13 +242,13 @@ export default function DetallePacientePage({ params }: { params: { id: string }
               .filter(Boolean);
 
             return (
-              <Card key={r.id || i} style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Card key={r.id || i} style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: 0 }}>
                 {/* Header Row: Badge & Clean Date */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
                   <Badge tipo={r.clasificacion} />
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontWeight: 600, flexShrink: 0 }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontWeight: 600, flexShrink: 0 }} suppressHydrationWarning>
                     <Clock size={13} style={{ color: 'var(--color-primary)' }} />
-                    <span suppressHydrationWarning>{fechaFormateada}</span>
+                    <span>{fechaFormateada}</span>
                   </span>
                 </div>
 
