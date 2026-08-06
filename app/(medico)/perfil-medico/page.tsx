@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Button } from '@/components/ui/Button';
 import { useAppStore } from '@/stores/app-store';
+import { cerrarSesionSupabase } from '@/lib/supabase/services';
 import { DEPARTAMENTOS_NICARAGUA } from '@/lib/validators/auth';
 import {
   Stethoscope,
@@ -29,9 +31,16 @@ const ESPECIALIDADES_MINSA = [
 ];
 
 export default function PerfilMedicoPage() {
+  const router = useRouter();
   const usuarioActual = useAppStore((state) => state.usuarioActual);
   const actualizarPerfilMedico = useAppStore((state) => state.actualizarPerfilMedico);
-  const cerrarSesion = useAppStore((state) => state.cerrarSesion);
+  const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
+
+  const handleCerrarSesion = async () => {
+    await cerrarSesionSupabase();
+    cerrarSesionStore();
+    router.push('/login');
+  };
 
   const [nombre, setNombre] = useState(usuarioActual?.nombreCompleto || 'Dr. Juan Carlos Pérez López');
   const [codigoMinsa, setCodigoMinsa] = useState(usuarioActual?.codigoMinsa || 'MINSA-48291');
@@ -213,7 +222,7 @@ export default function PerfilMedicoPage() {
         <Button
           variante="fantasma"
           type="button"
-          onClick={cerrarSesion}
+          onClick={handleCerrarSesion}
           style={{ width: '100%', color: 'var(--color-danger)' }}
         >
           <LogOut size={18} />

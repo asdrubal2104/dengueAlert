@@ -159,6 +159,18 @@ export async function iniciarSesionSupabase(
 }
 
 /**
+ * Cierra la sesión activa del usuario en Supabase Auth.
+ */
+export async function cerrarSesionSupabase(): Promise<void> {
+  try {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+  } catch (err) {
+    console.warn('Error al cerrar sesión en Supabase:', err);
+  }
+}
+
+/**
  * Verifica la conexión activa con Supabase ejecutando una consulta ligera al catálogo de síntomas.
  */
 export async function probarConexionSupabase(): Promise<{ ok: boolean; mensaje: string; count?: number }> {
