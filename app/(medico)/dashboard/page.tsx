@@ -28,10 +28,9 @@ export default function DoctorDashboardPage() {
   const alertasCriticas = alertas.filter((a) => a.tipo === 'EMERGENCY' || a.tipo === 'WARNING');
 
   return (
-    <div className="grid-responsive-2col slide-up">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
       {/* Credential Header Card */}
       <div
-        className="grid-col-full"
         style={{
           background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 50%, #075985 100%)',
           borderRadius: '24px',
@@ -129,8 +128,8 @@ export default function DoctorDashboardPage() {
       </div>
 
       {/* KPI Stats Grid */}
-      <div className="grid-col-full" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-        <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
           <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
             {totalPacientes}
           </div>
@@ -139,7 +138,7 @@ export default function DoctorDashboardPage() {
           </div>
         </Card>
 
-        <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
+        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
           <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-orange)', fontFamily: 'var(--font-mono)' }}>
             {alertasCriticas.length}
           </div>
@@ -148,7 +147,7 @@ export default function DoctorDashboardPage() {
           </div>
         </Card>
 
-        <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
+        <Card style={{ padding: '14px 8px', textAlign: 'center', marginBottom: 0 }}>
           <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>
             {alertas.filter((a) => a.tipo === 'EMERGENCY').length}
           </div>
@@ -160,7 +159,7 @@ export default function DoctorDashboardPage() {
 
       {/* Critical Alerts Feed */}
       {alertasCriticas.length > 0 && (
-        <Card style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.25)' }}>
+        <Card style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.25)', marginBottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-danger)' }}>
               <Bell size={18} className="pulso-alerta" />
@@ -208,73 +207,76 @@ export default function DoctorDashboardPage() {
         </Card>
       )}
 
-      {/* Patient Triage List */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Activity size={20} style={{ color: 'var(--color-primary)' }} />
-            <span>Triaje Clínico de Pacientes</span>
-          </h3>
-          <Link href="/pacientes" style={{ fontSize: '0.8125rem', color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>
-            Directorio completo →
-          </Link>
-        </div>
-
-        <PatientTriageList pacientes={pacientesVinc} registros={registros} />
-      </div>
-
-      {/* Doctor-Patient Linkage Code Generator */}
-      <Card style={{ backgroundColor: 'var(--color-surface-1)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              backgroundColor: 'var(--color-primary-soft)',
-              color: 'var(--color-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Key size={18} />
-          </div>
-          <div>
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>
-              Código para Vincular Paciente
+      {/* Main Responsive 2-Column Grid */}
+      <div className="grid-responsive-2col">
+        {/* Patient Triage List */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Activity size={20} style={{ color: 'var(--color-primary)' }} />
+              <span>Triaje Clínico de Pacientes</span>
             </h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-              Proporcioná este código de 6 dígitos al paciente en tu consulta.
-            </p>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div
-            style={{
-              flex: 1,
-              padding: '12px',
-              backgroundColor: 'var(--color-surface-0)',
-              border: '1px solid var(--color-border)',
-              borderRadius: '12px',
-              fontSize: '1.5rem',
-              fontWeight: 900,
-              letterSpacing: '0.3em',
-              textAlign: 'center',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--color-primary)',
-            }}
-          >
-            {codigoVinculacionActual || 'A3F7K2'}
+            <Link href="/pacientes" style={{ fontSize: '0.8125rem', color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>
+              Directorio completo →
+            </Link>
           </div>
 
-          <Button variante="secundario" onClick={generarCodigoVinculacion}>
-            <Plus size={16} />
-            <span>Nuevo</span>
-          </Button>
+          <PatientTriageList pacientes={pacientesVinc} registros={registros} />
         </div>
-      </Card>
+
+        {/* Doctor-Patient Linkage Code Generator */}
+        <Card style={{ backgroundColor: 'var(--color-surface-1)', marginBottom: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                backgroundColor: 'var(--color-primary-soft)',
+                color: 'var(--color-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Key size={18} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>
+                Código para Vincular Paciente
+              </h3>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+                Proporcioná este código de 6 dígitos al paciente en tu consulta.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div
+              style={{
+                flex: 1,
+                padding: '12px',
+                backgroundColor: 'var(--color-surface-0)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '12px',
+                fontSize: '1.5rem',
+                fontWeight: 900,
+                letterSpacing: '0.3em',
+                textAlign: 'center',
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--color-primary)',
+              }}
+            >
+              {codigoVinculacionActual || 'A3F7K2'}
+            </div>
+
+            <Button variante="secundario" onClick={generarCodigoVinculacion}>
+              <Plus size={16} />
+              <span>Nuevo</span>
+            </Button>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }
