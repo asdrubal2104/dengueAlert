@@ -16,9 +16,7 @@ export default function AlertaPage() {
     ? clasificarDengue(ultimoRegistro.sintomasIds)
     : clasificarDengue(['S11']); // Fallback warning for demo
 
-  const [mostrarOverlay, setMostrarOverlay] = useState(
-    resultado.clasificacion === 'DENGUE_ALARMA' || resultado.clasificacion === 'DENGUE_GRAVE',
-  );
+  const [mostrarOverlay, setMostrarOverlay] = useState(false);
 
   const sintomasCriticos = resultado.sintomasSeleccionados
     .filter((s) => s.esSignoAlarma)

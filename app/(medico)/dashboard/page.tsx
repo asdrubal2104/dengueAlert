@@ -59,10 +59,9 @@ export default function DoctorDashboardPage() {
           borderRadius: '24px',
           padding: 'clamp(20px, 4vw, 28px)',
           color: '#FFFFFF',
-          boxShadow: '0 12px 36px rgba(2, 132, 199, 0.25)',
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
           position: 'relative',
           overflow: 'hidden',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
         }}
       >
         <div style={{ position: 'relative', zIndex: 2 }}>
@@ -232,116 +231,122 @@ export default function DoctorDashboardPage() {
         </div>
       </div>
 
-      {/* Clinical Epidemiological Breakdown (2 Columns on Tablet) */}
-      <div className="grid-responsive-2col">
-        {/* WHO Clinical Phases Widget */}
-        <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '22px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)' }}>
-              <Activity size={20} />
+      {/* Clinical Epidemiological Breakdown (Single Card, Stacked) */}
+      <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '28px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          
+          {/* Triage Risk Classification Widget (KPIs) */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)' }}>
+                <PieChart size={20} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                  Clasificación Epidemiológica MINSA
+                </h3>
+                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  Categorización según guía nacional
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
-                Distribución por Fases OMS
-              </h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                Evolución de síntomas por cohorte
-              </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+              <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-danger)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }} />
+                  DENGUE GRAVE
+                </div>
+                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-danger)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
+                  {pacientesGrave}
+                </div>
+              </div>
+
+              <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(249, 115, 22, 0.08)', border: '1px solid rgba(249, 115, 22, 0.25)' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-orange)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-orange)' }} />
+                  SIGNOS ALARMA
+                </div>
+                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-orange)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
+                  {pacientesAlarma}
+                </div>
+              </div>
+
+              <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(234, 179, 8, 0.08)', border: '1px solid rgba(234, 179, 8, 0.25)' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-warning)' }} />
+                  DENGUE POSIBLE
+                </div>
+                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-warning)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
+                  {pacientesPosible}
+                </div>
+              </div>
+
+              <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.25)' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-success)' }} />
+                  BAJO RIESGO
+                </div>
+                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-success)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
+                  {pacientesBajoRiesgo}
+                </div>
+              </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
-                <span style={{ color: '#38BDF8' }}>Fase Febril (Días 1-2)</span>
-                <span style={{ color: 'var(--color-text)' }}>{enFaseFebril} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
+          {/* Divider */}
+          <div style={{ height: '1px', backgroundColor: 'var(--color-border)', width: '100%' }} />
+
+          {/* WHO Clinical Phases Widget */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)' }}>
+                <Activity size={20} />
               </div>
-              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
-                <div style={{ width: `${totalPacientes ? (enFaseFebril / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: '#38BDF8', transition: 'width 300ms ease', borderRadius: '999px' }} />
+              <div>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                  Distribución por Fases OMS
+                </h3>
+                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  Evolución de síntomas por cohorte
+                </p>
               </div>
             </div>
 
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
-                <span style={{ color: 'var(--color-orange)' }}>⚠️ Fase Crítica (Días 3-6)</span>
-                <span style={{ color: 'var(--color-text)' }}>{enFaseCritica} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
+                  <span style={{ color: '#38BDF8' }}>Fase Febril (Días 1-2)</span>
+                  <span style={{ color: 'var(--color-text)' }}>{enFaseFebril} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
+                </div>
+                <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
+                  <div style={{ width: `${totalPacientes ? (enFaseFebril / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: '#38BDF8', transition: 'width 300ms ease', borderRadius: '999px' }} />
+                </div>
               </div>
-              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
-                <div style={{ width: `${totalPacientes ? (enFaseCritica / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-orange)', transition: 'width 300ms ease', borderRadius: '999px' }} />
-              </div>
-            </div>
 
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
-                <span style={{ color: 'var(--color-success)' }}>Fase Recuperación (Día 7+)</span>
-                <span style={{ color: 'var(--color-text)' }}>{enFaseRecuperacion} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
+                  <span style={{ color: 'var(--color-orange)' }}>⚠️ Fase Crítica (Días 3-6)</span>
+                  <span style={{ color: 'var(--color-text)' }}>{enFaseCritica} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
+                </div>
+                <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
+                  <div style={{ width: `${totalPacientes ? (enFaseCritica / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-orange)', transition: 'width 300ms ease', borderRadius: '999px' }} />
+                </div>
               </div>
-              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
-                <div style={{ width: `${totalPacientes ? (enFaseRecuperacion / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-success)', transition: 'width 300ms ease', borderRadius: '999px' }} />
+
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 700, marginBottom: '6px' }}>
+                  <span style={{ color: 'var(--color-success)' }}>Fase Recuperación (Día 7+)</span>
+                  <span style={{ color: 'var(--color-text)' }}>{enFaseRecuperacion} <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>pacientes</span></span>
+                </div>
+                <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-surface-1)', borderRadius: '999px', overflow: 'hidden' }}>
+                  <div style={{ width: `${totalPacientes ? (enFaseRecuperacion / totalPacientes) * 100 : 0}%`, height: '100%', backgroundColor: 'var(--color-success)', transition: 'width 300ms ease', borderRadius: '999px' }} />
+                </div>
               </div>
             </div>
           </div>
-        </Card>
-
-        {/* Triage Risk Classification Widget */}
-        <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '22px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'rgba(14, 165, 233, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)' }}>
-              <PieChart size={20} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)' }}>
-                Clasificación Epidemiológica MINSA
-              </h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                Categorización según guía nacional
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-danger)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }} />
-                DENGUE GRAVE
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-danger)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
-                {pacientesGrave}
-              </div>
-            </div>
-
-            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(249, 115, 22, 0.08)', border: '1px solid rgba(249, 115, 22, 0.25)' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-orange)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-orange)' }} />
-                SIGNOS ALARMA
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-orange)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
-                {pacientesAlarma}
-              </div>
-            </div>
-
-            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(234, 179, 8, 0.08)', border: '1px solid rgba(234, 179, 8, 0.25)' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-warning)' }} />
-                DENGUE POSIBLE
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-warning)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
-                {pacientesPosible}
-              </div>
-            </div>
-
-            <div style={{ padding: '14px', borderRadius: '14px', backgroundColor: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.25)' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-success)' }} />
-                BAJO RIESGO
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-success)', marginTop: '6px', fontFamily: 'var(--font-mono)' }}>
-                {pacientesBajoRiesgo}
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
 
       {/* Critical Alerts Feed */}
       {alertasCriticas.length > 0 && (
