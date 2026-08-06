@@ -68,6 +68,7 @@ interface AppState {
   guardarEvaluacion: (
     sintomasIds: SintomaId[],
     diasConSintomas: number,
+    fiebreBajoRecientemente?: boolean,
     notas?: string,
   ) => RegistroSintomas;
   generarCodigoVinculacion: () => string;
@@ -125,9 +126,13 @@ export const useAppStore = create<AppState>()(
 
       cerrarSesion: () => set({ usuarioActual: null }),
 
-      guardarEvaluacion: (sintomasIds, diasConSintomas, notas) => {
+      guardarEvaluacion: (sintomasIds, diasConSintomas, fiebreBajoRecientemente, notas) => {
         const usuario = get().usuarioActual;
-        const evaluacion = clasificarDengue(sintomasIds, diasConSintomas);
+        const evaluacion = clasificarDengue(
+          sintomasIds,
+          diasConSintomas,
+          fiebreBajoRecientemente,
+        );
 
         const nuevoRegistro: RegistroSintomas = {
           id: `reg-${Date.now()}`,
@@ -135,6 +140,7 @@ export const useAppStore = create<AppState>()(
           pacienteNombre: usuario?.nombreCompleto || 'Paciente',
           fechaRegistro: new Date().toISOString(),
           diasConSintomas,
+          fiebreBajoRecientemente,
           faseDengue: evaluacion.faseTemporal,
           sintomasIds,
           clasificacion: evaluacion.clasificacion,
@@ -144,12 +150,10 @@ export const useAppStore = create<AppState>()(
 
         const nuevosRegistros = [nuevoRegistro, ...get().registros];
 
-        // Crear alerta si es ALARMA o GRAVE
+        // Solo los signos graves activan una alerta disruptiva. Los signos de alarma
+        // llevan a atención presencial hoy desde el resultado, sin alarma sonora.
         let nuevasAlertas = get().alertas;
-        if (
-          evaluacion.clasificacion === 'DENGUE_ALARMA' ||
-          evaluacion.clasificacion === 'DENGUE_GRAVE'
-        ) {
+        if (evaluacion.clasificacion === 'DENGUE_GRAVE') {
           const sintomasCriticos = evaluacion.sintomasSeleccionados
             .filter((s) => s.esSignoAlarma)
             .map((s) => s.nombre);
@@ -159,7 +163,7 @@ export const useAppStore = create<AppState>()(
             pacienteId: usuario?.id || 'paciente-anon',
             pacienteNombre: usuario?.nombreCompleto || 'Paciente',
             evaluacionId: nuevoRegistro.id,
-            tipo: evaluacion.clasificacion === 'DENGUE_GRAVE' ? 'EMERGENCY' : 'WARNING',
+            tipo: 'EMERGENCY',
             estado: 'TRIGGERED',
             fechaHora: new Date().toISOString(),
             sintomasCriticos,

@@ -1,172 +1,195 @@
-import { SintomaId, ResultadoEvaluacion, ClasificacionDengue, FaseDengue } from '@/types/dengue';
+import {
+  ClasificacionDengue,
+  FaseDengue,
+  NivelAtencion,
+  ResultadoEvaluacion,
+  Sintoma,
+  SintomaId,
+} from '@/types/dengue';
 import { CATALOGO_SINTOMAS, obtenerSintomaPorId } from './sintomas';
 
+interface DetallesTriaje {
+  tituloResultado: string;
+  colorBadge: string;
+  nivelAtencion: NivelAtencion;
+  accionPrimaria: string;
+  plazoAtencion: string;
+  recomendaciones: string[];
+  accionesRequeridas: string[];
+}
+
+/**
+ * Triaje orientativo basado en síntomas reportados por la persona.
+ * No confirma dengue ni reemplaza la evaluación presencial de un profesional.
+ */
 export function clasificarDengue(
   sintomasIds: SintomaId[],
-  diasConSintomas: number = 1
+  diasConSintomas = 1,
+  fiebreBajoRecientemente = false,
 ): ResultadoEvaluacion {
   const seleccionados = sintomasIds
     .map((id) => obtenerSintomaPorId(id))
-    .filter((s): s is NonNullable<typeof s> => s !== undefined);
+    .filter((s): s is Sintoma => s !== undefined);
 
-  const tieneGrave = seleccionados.some((s) => s.categoria === 'SEVERE');
-  const tieneAlarma = seleccionados.some((s) => s.categoria === 'WARNING');
-
+  const sintomasGraves = seleccionados.filter((s) => s.categoria === 'SEVERE');
+  const signosAlarma = seleccionados.filter((s) => s.categoria === 'WARNING');
   const tieneFiebre = sintomasIds.includes('S01');
-  const otrosGenerales = seleccionados.filter((s) => s.categoria === 'GENERAL' && s.id !== 'S01');
-  
-  // Contexto clínico de dengue: Fiebre (S01) O al menos 2 síntomas generales
+  const otrosGenerales = seleccionados.filter(
+    (s) => s.categoria === 'GENERAL' && s.id !== 'S01',
+  );
   const tieneContextoDengue = tieneFiebre || otrosGenerales.length >= 2;
   const cumpleCriterioPosible = tieneFiebre && otrosGenerales.length >= 2;
+  const faseTemporal = obtenerFaseTemporal(diasConSintomas);
+  const advertenciaFaseCritica = faseTemporal === 'CRITICA' && fiebreBajoRecientemente;
 
-  // Determinar Fase Temporal por Días según guías OMS
-  let faseTemporal: FaseDengue = 'FEBRIL';
-  if (diasConSintomas >= 3 && diasConSintomas <= 6) {
-    faseTemporal = 'CRITICA';
-  } else if (diasConSintomas >= 7) {
-    faseTemporal = 'RECUPERACION';
-  }
+  const clasificacion = obtenerClasificacion({
+    tieneSignoGrave: sintomasGraves.length > 0,
+    tieneSignoAlarma: signosAlarma.length > 0,
+    tieneContextoDengue,
+    cumpleCriterioPosible,
+  });
 
-  let clasificacion: ClasificacionDengue = 'BAJO_RIESGO';
-
-  if (tieneGrave) {
-    clasificacion = 'DENGUE_GRAVE';
-  } else if (tieneAlarma && tieneContextoDengue) {
-    clasificacion = 'DENGUE_ALARMA';
-  } else if (tieneAlarma && !tieneContextoDengue) {
-    clasificacion = 'CONSULTA_MEDICA';
-  } else if (cumpleCriterioPosible) {
-    // Si cumple criterio de dengue posible PERO está en la ventana crítica (días 3-6),
-    // elevamos la alerta a DENGUE_ALARMA preventivamente según guías OMS
-    if (faseTemporal === 'CRITICA') {
-      clasificacion = 'DENGUE_ALARMA';
-    } else {
-      clasificacion = 'DENGUE_POSIBLE';
-    }
-  } else {
-    clasificacion = 'BAJO_RIESGO';
-  }
-
-  // Cálculo del Risk Score
+  const detalles = obtenerDetallesTriaje(clasificacion);
+  const motivosDerivacion = obtenerMotivosDerivacion(
+    clasificacion,
+    sintomasGraves,
+    signosAlarma,
+    advertenciaFaseCritica,
+  );
   const pesoTotalMaximo = CATALOGO_SINTOMAS.reduce((acc, s) => acc + s.peso, 0);
   const pesoSeleccionado = seleccionados.reduce((acc, s) => acc + s.peso, 0);
-  const riskScore = Math.min(100, Math.round((pesoSeleccionado / pesoTotalMaximo) * 100));
-
-  // Generar mensajes y acciones según clasificación y fase
-  const { recomendaciones, accionesRequeridas, colorBadge, tituloResultado } =
-    obtenerDetallesClasificacion(clasificacion, faseTemporal);
 
   return {
     clasificacion,
-    riskScore,
+    riskScore: Math.min(100, Math.round((pesoSeleccionado / pesoTotalMaximo) * 100)),
     sintomasSeleccionados: seleccionados,
-    tieneSignoAlarma: tieneAlarma,
-    tieneSignoGrave: tieneGrave,
+    tieneSignoAlarma: signosAlarma.length > 0,
+    tieneSignoGrave: sintomasGraves.length > 0,
     tieneContextoDengue,
     faseTemporal,
-    recomendaciones,
-    accionesRequeridas,
-    colorBadge,
-    tituloResultado,
+    advertenciaFaseCritica,
+    motivosDerivacion,
+    ...detalles,
   };
 }
 
-function obtenerDetallesClasificacion(
-  clasificacion: ClasificacionDengue,
-  faseTemporal: FaseDengue
-) {
+function obtenerFaseTemporal(diasConSintomas: number): FaseDengue {
+  if (diasConSintomas >= 7) return 'RECUPERACION';
+  if (diasConSintomas >= 3) return 'CRITICA';
+  return 'FEBRIL';
+}
+
+function obtenerClasificacion({
+  tieneSignoGrave,
+  tieneSignoAlarma,
+  tieneContextoDengue,
+  cumpleCriterioPosible,
+}: {
+  tieneSignoGrave: boolean;
+  tieneSignoAlarma: boolean;
+  tieneContextoDengue: boolean;
+  cumpleCriterioPosible: boolean;
+}): ClasificacionDengue {
+  if (tieneSignoGrave) return 'DENGUE_GRAVE';
+  if (tieneSignoAlarma && tieneContextoDengue) return 'DENGUE_ALARMA';
+  if (tieneSignoAlarma) return 'CONSULTA_MEDICA';
+  if (cumpleCriterioPosible) return 'DENGUE_POSIBLE';
+  return 'BAJO_RIESGO';
+}
+
+function obtenerDetallesTriaje(clasificacion: ClasificacionDengue): DetallesTriaje {
   switch (clasificacion) {
     case 'DENGUE_GRAVE':
       return {
-        tituloResultado: 'EMERGENCIA MÉDICA — Dengue Grave',
+        tituloResultado: 'Emergencia médica: buscá ayuda ahora',
         colorBadge: 'DENGUE_GRAVE',
+        nivelAtencion: 'EMERGENCIA',
+        accionPrimaria: 'Llamá al 911 o acudí inmediatamente al hospital más cercano.',
+        plazoAtencion: 'Ahora mismo',
         recomendaciones: [
-          'Se detectaron signos de gravedad crítica.',
-          'Acudí INMEDIATAMENTE al hospital o centro de salud más cercano.',
-          'No tomes ningún medicamento por tu cuenta.',
-          'Mantente en posición cómoda y pide ayuda a un familiar.',
+          'Se reportaron síntomas que pueden corresponder a una emergencia médica.',
+          'No esperés a que mejoren: pedí ayuda a un familiar o persona cercana para trasladarte.',
+          'No tomés aspirina, ibuprofeno, naproxeno ni diclofenaco.',
         ],
-        accionesRequeridas: [
-          'Llamar al 911 o Cruz Roja (128)',
-          'Ver hospital más cercano en el mapa',
-          'Compartir ubicación con un familiar o médico',
-        ],
+        accionesRequeridas: ['Llamar al 911', 'Ver hospital más cercano', 'Compartir ubicación'],
       };
-
     case 'DENGUE_ALARMA':
       return {
-        tituloResultado:
-          faseTemporal === 'CRITICA'
-            ? '¡ATENCIÓN! — Fase Crítica de Dengue Detectada'
-            : '¡ATENCIÓN! — Signos de Alarma Detectados',
+        tituloResultado: 'Atención hoy: signos de alarma',
         colorBadge: 'DENGUE_ALARMA',
+        nivelAtencion: 'ATENCION_HOY',
+        accionPrimaria: 'Acudí hoy a un centro de salud u hospital para una valoración presencial.',
+        plazoAtencion: 'Hoy, sin esperar a que empeore',
         recomendaciones: [
-          faseTemporal === 'CRITICA'
-            ? 'Te encontrás entre los días 3 y 6 de la enfermedad (Fase Crítica). En esta etapa la fiebre suele bajar pero aumenta el riesgo de fuga plasmática y complicaciones.'
-            : 'En el contexto febril/clínico actual, se identificaron signos de alarma que requieren valoración médica urgente hoy.',
-          'No esperes a que los síntomas empeoren.',
-          'Toma abundante líquido (agua, suero oral) si toleras la vía oral.',
-          'NO tomes aspirina, ibuprofeno ni naproxeno. Solo acetaminofén si hay dolor o fiebre.',
+          'Los síntomas reportados requieren valoración médica el mismo día.',
+          'Mientras te trasladás, tomá líquidos si los tolerás.',
+          'No tomés aspirina, ibuprofeno, naproxeno ni diclofenaco.',
         ],
-        accionesRequeridas: [
-          'Acudir al médico o centro de salud hoy mismo',
-          'Buscar hospital cercano',
-          'Notificar a tu médico vinculado',
-        ],
+        accionesRequeridas: ['Acudir hoy a un centro de salud', 'Buscar hospital cercano', 'Compartir ubicación'],
       };
-
     case 'CONSULTA_MEDICA':
       return {
-        tituloResultado: 'Consulta Médica Recomendada',
+        tituloResultado: 'Atención hoy: síntoma que requiere valoración',
         colorBadge: 'CONSULTA_MEDICA',
+        nivelAtencion: 'ATENCION_HOY',
+        accionPrimaria: 'Acudí hoy a una unidad de salud para que te evalúen presencialmente.',
+        plazoAtencion: 'Hoy, aunque no se confirme dengue',
         recomendaciones: [
-          'Presentás síntomas que ameritan valoración médica, pero no se detecta un cuadro típico febril de dengue.',
-          'Acudí a tu unidad de salud MINSA más cercana para una evaluación presencial.',
-          'Si en las próximas horas aparece fiebre (≥38°C), volvé a evaluar tus síntomas en la app.',
-          'Mantené la hidratación y el reposo mientras tanto.',
-          'NO tomes aspirina, ibuprofeno ni naproxeno. Usa únicamente acetaminofén si hay dolor.',
+          'Este síntoma puede requerir atención médica por dengue u otra causa.',
+          'No esperés a que aparezca fiebre para buscar valoración.',
+          'No tomés aspirina, ibuprofeno, naproxeno ni diclofenaco.',
         ],
-        accionesRequeridas: [
-          'Visitar tu centro de salud MINSA para valoración',
-          'Reevaluar si aparece fiebre',
-          'Consultar a tu médico vinculado',
-        ],
+        accionesRequeridas: ['Acudir hoy a un centro de salud', 'Buscar hospital cercano'],
       };
-
     case 'DENGUE_POSIBLE':
       return {
-        tituloResultado: 'Posible Dengue Sin Signos de Alarma',
+        tituloResultado: 'Posible dengue sin signos de alarma',
         colorBadge: 'DENGUE_POSIBLE',
+        nivelAtencion: 'MONITOREO_ESTRECHO',
+        accionPrimaria: 'Descansá, hidratate y reevaluá de inmediato si aparece un signo de alarma.',
+        plazoAtencion: 'Reevaluá ante cualquier empeoramiento',
         recomendaciones: [
-          faseTemporal === 'RECUPERACION'
-            ? 'Estás en días de probable fase de recuperación (Día 7+). Si tus síntomas van disminuyendo, mantené reposo e hidratación.'
-            : 'Tus síntomas son compatibles con la fase febril inicial del dengue (Días 1-3).',
-          'Reposo absoluto y abundante hidratación (2 a 3 litros de suero u agua al día).',
-          'Para la fiebre o dolor, usa ÚNICAMENTE acetaminofén (paracetamol).',
-          'PROHIBIDO tomar aspirina, ibuprofeno o antiinflamatorios (aumentan riesgo de sangrado).',
-          'Si la fiebre baja en los días 3 a 6, mantén vigilancia estricta de signos de alarma.',
+          'Tus síntomas son compatibles con una sospecha de dengue, pero la app no puede confirmarlo.',
+          'Tomá abundantes líquidos y usá únicamente acetaminofén para fiebre o dolor.',
+          'Buscá atención hoy si aparece dolor abdominal intenso, vómitos persistentes, sangrado, somnolencia o dificultad para respirar.',
         ],
-        accionesRequeridas: [
-          'Reevaluar tus síntomas cada 12 horas',
-          'Consultar a tu médico vinculado',
-          'Ver guía educativa de cuidados en casa',
-        ],
+        accionesRequeridas: ['Reevaluar si aparece un signo de alarma', 'Leer cuidados en casa'],
       };
-
     case 'BAJO_RIESGO':
     default:
       return {
-        tituloResultado: 'Bajo Riesgo — Sin Criterios de Dengue',
+        tituloResultado: 'Sin criterios actuales de alarma por dengue',
         colorBadge: 'BAJO_RIESGO',
+        nivelAtencion: 'AUTOCUIDADO',
+        accionPrimaria: 'Vigilá tus síntomas y realizá otra evaluación si aparece fiebre o empeorás.',
+        plazoAtencion: 'Reevaluá si aparecen síntomas nuevos',
         recomendaciones: [
-          'Tus síntomas actuales no cumplen con el patrón típico del dengue.',
-          'Si aparece fiebre o nuevos síntomas en las próximas horas, realiza una nueva evaluación.',
-          'Mantén limpia tu vivienda y elimina recipientes con agua estancada para evitar mosquitos.',
+          'Los síntomas reportados no cumplen criterios actuales de sospecha o alarma por dengue.',
+          'Si aparece fiebre, dolor abdominal intenso, vómitos persistentes, sangrado o dificultad para respirar, evaluate de nuevo y buscá atención.',
+          'Eliminá recipientes con agua estancada para prevenir criaderos de mosquitos.',
         ],
-        accionesRequeridas: [
-          'Monitorear tu estado de salud',
-          'Leer consejos de prevención del dengue',
-        ],
+        accionesRequeridas: ['Monitorear síntomas', 'Leer consejos de prevención'],
       };
   }
+}
+
+function obtenerMotivosDerivacion(
+  clasificacion: ClasificacionDengue,
+  sintomasGraves: Sintoma[],
+  signosAlarma: Sintoma[],
+  advertenciaFaseCritica: boolean,
+): string[] {
+  if (clasificacion === 'DENGUE_GRAVE') {
+    return sintomasGraves.map((s) => s.nombre);
+  }
+
+  if (clasificacion === 'DENGUE_ALARMA' || clasificacion === 'CONSULTA_MEDICA') {
+    return signosAlarma.map((s) => s.nombre);
+  }
+
+  if (advertenciaFaseCritica) {
+    return ['La fiebre bajó recientemente entre los días 3 y 6 de síntomas'];
+  }
+
+  return [];
 }

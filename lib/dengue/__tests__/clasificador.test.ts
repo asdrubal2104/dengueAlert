@@ -24,6 +24,7 @@ describe('clasificarDengue — Algoritmo OMS 2009', () => {
       expect(res1.clasificacion).toBe('DENGUE_ALARMA');
       expect(res1.tieneSignoAlarma).toBe(true);
       expect(res1.tieneContextoDengue).toBe(true);
+      expect(res1.nivelAtencion).toBe('ATENCION_HOY');
 
       const res2 = clasificarDengue(['S01', 'S13']);
       expect(res2.clasificacion).toBe('DENGUE_ALARMA');
@@ -47,6 +48,8 @@ describe('clasificarDengue — Algoritmo OMS 2009', () => {
       expect(res1.clasificacion).toBe('CONSULTA_MEDICA');
       expect(res1.tieneSignoAlarma).toBe(true);
       expect(res1.tieneContextoDengue).toBe(false);
+      expect(res1.nivelAtencion).toBe('ATENCION_HOY');
+      expect(res1.accionPrimaria).toContain('Acudí hoy');
 
       const res2 = clasificarDengue(['S14']);
       expect(res2.clasificacion).toBe('CONSULTA_MEDICA');
@@ -68,6 +71,7 @@ describe('clasificarDengue — Algoritmo OMS 2009', () => {
     it('clasifica como DENGUE_POSIBLE cuando hay fiebre (S01) + al menos 2 síntomas generales', () => {
       const res = clasificarDengue(['S01', 'S02', 'S04']);
       expect(res.clasificacion).toBe('DENGUE_POSIBLE');
+      expect(res.nivelAtencion).toBe('MONITOREO_ESTRECHO');
     });
 
     it('solo fiebre (S01) no clasifica como dengue posible', () => {
@@ -121,15 +125,23 @@ describe('clasificarDengue — Algoritmo OMS 2009', () => {
       expect(clasificarDengue(['S01'], 7).faseTemporal).toBe('RECUPERACION');
     });
 
-    it('eleva DENGUE_POSIBLE a DENGUE_ALARMA si el paciente está en la fase crítica (días 3-6)', () => {
-      // Día 1 (Febril) -> DENGUE_POSIBLE
+    it('no eleva la clasificación solo por estar en la fase crítica', () => {
       const resDia1 = clasificarDengue(['S01', 'S02', 'S04'], 1);
       expect(resDia1.clasificacion).toBe('DENGUE_POSIBLE');
 
-      // Día 5 (Fase Crítica) -> Eleva a DENGUE_ALARMA
       const resDia5 = clasificarDengue(['S01', 'S02', 'S04'], 5);
-      expect(resDia5.clasificacion).toBe('DENGUE_ALARMA');
+      expect(resDia5.clasificacion).toBe('DENGUE_POSIBLE');
       expect(resDia5.faseTemporal).toBe('CRITICA');
+    });
+
+    it('agrega vigilancia reforzada si la fiebre bajó en días 3 a 6 sin cambiar la clasificación', () => {
+      const res = clasificarDengue(['S01', 'S02', 'S04'], 4, true);
+      expect(res.clasificacion).toBe('DENGUE_POSIBLE');
+      expect(res.nivelAtencion).toBe('MONITOREO_ESTRECHO');
+      expect(res.advertenciaFaseCritica).toBe(true);
+      expect(res.motivosDerivacion).toContain(
+        'La fiebre bajó recientemente entre los días 3 y 6 de síntomas',
+      );
     });
 
     it('síntomas SEVERE en día 8 (Recuperación) mantienen clasificación DENGUE_GRAVE', () => {
@@ -139,4 +151,3 @@ describe('clasificarDengue — Algoritmo OMS 2009', () => {
     });
   });
 });
-

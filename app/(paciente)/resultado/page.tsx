@@ -11,7 +11,7 @@ import { SintomaIcon } from '@/components/ui/SintomaIcon';
 import { useAppStore } from '@/stores/app-store';
 import { CATALOGO_SINTOMAS } from '@/lib/dengue/sintomas';
 import { clasificarDengue } from '@/lib/dengue/clasificador';
-import { ClasificacionDengue } from '@/types/dengue';
+import { ClasificacionDengue, NivelAtencion } from '@/types/dengue';
 import {
   MapPin,
   AlertTriangle,
@@ -55,6 +55,19 @@ const getBannerStyle = (clasificacion: ClasificacionDengue) => {
   }
 };
 
+const getAtencionStyle = (nivelAtencion: NivelAtencion) => {
+  switch (nivelAtencion) {
+    case 'EMERGENCIA':
+      return { color: '#FCA5A5', background: 'rgba(220, 38, 38, 0.12)', border: 'rgba(220, 38, 38, 0.5)' };
+    case 'ATENCION_HOY':
+      return { color: '#FDBA74', background: 'rgba(234, 88, 12, 0.12)', border: 'rgba(234, 88, 12, 0.5)' };
+    case 'MONITOREO_ESTRECHO':
+      return { color: '#FCD34D', background: 'rgba(217, 119, 6, 0.12)', border: 'rgba(217, 119, 6, 0.5)' };
+    default:
+      return { color: '#6EE7B7', background: 'rgba(5, 150, 105, 0.12)', border: 'rgba(5, 150, 105, 0.5)' };
+  }
+};
+
 export default function ResultadoEvaluacionPage() {
   const router = useRouter();
   const registros = useAppStore((state) => state.registros);
@@ -63,13 +76,15 @@ export default function ResultadoEvaluacionPage() {
 
   const resultado = React.useMemo(() => {
     return ultimaEvaluacion
-      ? clasificarDengue(ultimaEvaluacion.sintomasIds, ultimaEvaluacion.diasConSintomas)
+      ? clasificarDengue(
+          ultimaEvaluacion.sintomasIds,
+          ultimaEvaluacion.diasConSintomas,
+          ultimaEvaluacion.fiebreBajoRecientemente,
+        )
       : null;
   }, [ultimaEvaluacion]);
 
-  const esEmergencia = resultado
-    ? resultado.clasificacion === 'DENGUE_GRAVE' || resultado.clasificacion === 'DENGUE_ALARMA'
-    : false;
+  const esEmergencia = resultado?.nivelAtencion === 'EMERGENCIA';
 
   const [mostrarOverlay, setMostrarOverlay] = useState(esEmergencia);
 
@@ -93,9 +108,10 @@ export default function ResultadoEvaluacionPage() {
   }
 
   const { background, boxShadow, Icon: HeaderIcon } = getBannerStyle(resultado.clasificacion);
+  const estiloAtencion = getAtencionStyle(resultado.nivelAtencion);
 
   const sintomasCriticos = resultado.sintomasSeleccionados
-    .filter((s) => s.esSignoAlarma)
+    .filter((s) => s.categoria === 'SEVERE')
     .map((s) => s.nombre);
 
   const sintomasObjetos = ultimaEvaluacion.sintomasIds
@@ -189,6 +205,46 @@ export default function ResultadoEvaluacionPage() {
         />
       </div>
 
+      <Card
+        style={{
+          padding: '18px 20px',
+          backgroundColor: estiloAtencion.background,
+          border: `1px solid ${estiloAtencion.border}`,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <div
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: estiloAtencion.color,
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              flexShrink: 0,
+            }}
+          >
+            {resultado.nivelAtencion === 'EMERGENCIA' ? <ShieldAlert size={22} /> : <Stethoscope size={22} />}
+          </div>
+          <div>
+            <div style={{ color: estiloAtencion.color, fontWeight: 900, fontSize: '0.75rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              {resultado.plazoAtencion}
+            </div>
+            <p style={{ marginTop: '4px', color: 'var(--color-text)', fontWeight: 800, fontSize: '1rem', lineHeight: 1.35 }}>
+              {resultado.accionPrimaria}
+            </p>
+            {resultado.motivosDerivacion.length > 0 && (
+              <p style={{ marginTop: '8px', color: 'var(--color-text-secondary)', fontSize: '0.8125rem', lineHeight: 1.45 }}>
+                <strong style={{ color: 'var(--color-text)' }}>Motivo:</strong>{' '}
+                {resultado.motivosDerivacion.join(', ')}.
+              </p>
+            )}
+          </div>
+        </div>
+      </Card>
+
       {/* Clinical Risk Score Card (Extracted to maintain high contrast) */}
       <Card style={{ padding: '18px 20px' }}>
         <RiskGauge score={resultado.riskScore} clasificacion={resultado.clasificacion} />
@@ -249,6 +305,17 @@ export default function ResultadoEvaluacionPage() {
           </div>
         </div>
       </Card>
+
+      {resultado.advertenciaFaseCritica && (
+        <Card style={{ padding: '16px 18px', backgroundColor: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.45)' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+            <AlertTriangle size={20} style={{ color: '#FBBF24', flexShrink: 0, marginTop: '2px' }} />
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+              <strong style={{ color: '#FCD34D' }}>Vigilancia reforzada:</strong> cuando la fiebre baja entre los días 3 y 6 pueden aparecer complicaciones. Observá signos de alarma durante las próximas 24–48 horas y acudí hoy si aparece alguno.
+            </p>
+          </div>
+        </Card>
+      )}
 
       {/* Medication Warning Box (Refined matching Emergency Contact design in Inicio) */}
       <Card
@@ -330,7 +397,7 @@ export default function ResultadoEvaluacionPage() {
           style={{ textDecoration: 'none', width: '100%' }}
         >
           <MapPin size={18} />
-          <span>Ver mapa de centros de salud cercanos</span>
+          <span>{resultado.nivelAtencion === 'ATENCION_HOY' ? 'Buscar centro de salud para atención hoy' : 'Ver mapa de centros de salud cercanos'}</span>
         </a>
 
         <Link 
@@ -342,6 +409,10 @@ export default function ResultadoEvaluacionPage() {
           <span>Volver a evaluar</span>
         </Link>
       </div>
+
+      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', lineHeight: 1.45, textAlign: 'center', padding: '0 10px' }}>
+        Esta evaluación es orientativa y no sustituye el diagnóstico de un médico. Si tenés dudas, consultá a tu médico o acudí al centro de salud más cercano.
+      </p>
 
       {/* Care Recommendations List (Refined UI with icon bullets) */}
       <Card style={{ padding: '20px' }}>

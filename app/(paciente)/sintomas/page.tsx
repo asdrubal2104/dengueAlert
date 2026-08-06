@@ -19,6 +19,7 @@ export default function SelectorSintomasPage() {
   const router = useRouter();
   const [sintomasSeleccionados, setSintomasSeleccionados] = useState<SintomaId[]>([]);
   const [diasFiebre, setDiasFiebre] = useState<number>(1);
+  const [fiebreBajoRecientemente, setFiebreBajoRecientemente] = useState<'SI' | 'NO' | 'NO_SE'>('NO_SE');
   const [busqueda, setBusqueda] = useState<string>('');
   const [categoriaActiva, setCategoriaActiva] = useState<'TODOS' | 'GENERALES' | 'ALARMA'>('TODOS');
 
@@ -53,9 +54,17 @@ export default function SelectorSintomasPage() {
     );
   }, [sintomasSeleccionados]);
 
+  const tieneSignosGraves = useMemo(() => {
+    return sintomasSeleccionados.some(
+      (id) => CATALOGO_SINTOMAS.find((s) => s.id === id)?.categoria === 'SEVERE',
+    );
+  }, [sintomasSeleccionados]);
+
+  const estaEnVentanaCritica = diasFiebre >= 3 && diasFiebre <= 6;
+
   const handleVerResultado = () => {
     if (sintomasSeleccionados.length === 0) return;
-    guardarEvaluacion(sintomasSeleccionados, diasFiebre);
+    guardarEvaluacion(sintomasSeleccionados, diasFiebre, fiebreBajoRecientemente === 'SI');
     router.push('/resultado');
   };
 
@@ -70,6 +79,54 @@ export default function SelectorSintomasPage() {
           Seleccioná todos los síntomas que presentás actualmente para el triaje clínico.
         </p>
       </div>
+
+      {estaEnVentanaCritica && (
+        <div
+          style={{
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            border: '1px solid rgba(245, 158, 11, 0.45)',
+            borderRadius: '16px',
+            padding: '16px',
+          }}
+        >
+          <div style={{ fontSize: '0.875rem', fontWeight: 800, color: '#FBBF24', marginBottom: '6px' }}>
+            Entre los días 3 y 6 hay que vigilarse más de cerca
+          </div>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: 1.45, marginBottom: '12px' }}>
+            ¿La fiebre bajó o desapareció recientemente?
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+            {([
+              ['SI', 'Sí'],
+              ['NO', 'No'],
+              ['NO_SE', 'No estoy seguro/a'],
+            ] as const).map(([valor, etiqueta]) => {
+              const seleccionado = fiebreBajoRecientemente === valor;
+              return (
+                <button
+                  key={valor}
+                  type="button"
+                  onClick={() => setFiebreBajoRecientemente(valor)}
+                  aria-pressed={seleccionado}
+                  style={{
+                    minHeight: '42px',
+                    borderRadius: '10px',
+                    border: seleccionado ? '2px solid #F59E0B' : '1px solid var(--color-border)',
+                    backgroundColor: seleccionado ? 'rgba(245, 158, 11, 0.18)' : 'var(--color-surface-1)',
+                    color: seleccionado ? '#FCD34D' : 'var(--color-text-secondary)',
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    cursor: 'pointer',
+                  }}
+                  className="touch-feedback"
+                >
+                  {etiqueta}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Duration Selector */}
       <div
@@ -217,7 +274,10 @@ export default function SelectorSintomasPage() {
         >
           <AlertTriangle size={24} style={{ flexShrink: 0 }} />
           <div style={{ fontSize: '0.8125rem', lineHeight: 1.4, fontWeight: 600 }}>
-            <strong>¡Atención médica urgente necesaria!</strong> Habéis seleccionado uno o más signos de alarma de Dengue Grave.
+            <strong>{tieneSignosGraves ? '¡Emergencia médica!' : 'Atención presencial hoy.'}</strong>{' '}
+            {tieneSignosGraves
+              ? 'Reportaste un signo grave. Buscá ayuda inmediata.'
+              : 'Reportaste un signo de alarma que requiere valoración en una unidad de salud.'}
           </div>
         </div>
       )}

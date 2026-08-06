@@ -46,6 +46,12 @@ export type ClasificacionDengue =
 
 export type FaseDengue = 'FEBRIL' | 'CRITICA' | 'RECUPERACION';
 
+export type NivelAtencion =
+  | 'AUTOCUIDADO'
+  | 'MONITOREO_ESTRECHO'
+  | 'ATENCION_HOY'
+  | 'EMERGENCIA';
+
 export interface ResultadoEvaluacion {
   clasificacion: ClasificacionDengue;
   riskScore: number;
@@ -54,6 +60,11 @@ export interface ResultadoEvaluacion {
   tieneSignoGrave: boolean;
   tieneContextoDengue: boolean;
   faseTemporal: FaseDengue;
+  nivelAtencion: NivelAtencion;
+  accionPrimaria: string;
+  plazoAtencion: string;
+  motivosDerivacion: string[];
+  advertenciaFaseCritica: boolean;
   recomendaciones: string[];
   accionesRequeridas: string[];
   colorBadge: string;
@@ -65,6 +76,7 @@ export interface RegistroSintomas {
   pacienteId: string;
   fechaRegistro: string;
   diasConSintomas: number;
+  fiebreBajoRecientemente?: boolean;
   faseDengue?: FaseDengue;
   sintomasIds: SintomaId[];
   clasificacion: ClasificacionDengue;
