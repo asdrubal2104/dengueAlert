@@ -225,57 +225,67 @@ export default function DoctorDashboardPage() {
         </div>
 
         {/* Doctor-Patient Linkage Code Generator */}
-        <Card style={{ backgroundColor: 'var(--color-surface-1)', marginBottom: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                backgroundColor: 'var(--color-primary-soft)',
-                color: 'var(--color-primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Key size={18} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>
-                Código para Vincular Paciente
-              </h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-                Proporcioná este código de 6 dígitos al paciente en tu consulta.
-              </p>
-            </div>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Key size={20} style={{ color: 'var(--color-primary)' }} />
+              <span>Vincular Paciente</span>
+            </h3>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div
-              style={{
-                flex: 1,
-                padding: '12px',
-                backgroundColor: 'var(--color-surface-0)',
-                border: '1px solid var(--color-border)',
-                borderRadius: '12px',
-                fontSize: '1.5rem',
-                fontWeight: 900,
-                letterSpacing: '0.3em',
-                textAlign: 'center',
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--color-primary)',
-              }}
-            >
-              {codigoVinculacionActual || 'A3F7K2'}
+          <Card style={{ backgroundColor: 'var(--color-surface-1)', marginBottom: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  backgroundColor: 'var(--color-primary-soft)',
+                  color: 'var(--color-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <Key size={18} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>
+                  Código de Consulta
+                </h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+                  Proporcioná este código de 6 dígitos al paciente para vincular su expediente.
+                </p>
+              </div>
             </div>
 
-            <Button variante="secundario" onClick={generarCodigoVinculacion}>
-              <Plus size={16} />
-              <span>Nuevo</span>
-            </Button>
-          </div>
-        </Card>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  backgroundColor: 'var(--color-surface-0)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '12px',
+                  fontSize: '1.5rem',
+                  fontWeight: 900,
+                  letterSpacing: '0.3em',
+                  textAlign: 'center',
+                  fontFamily: 'var(--font-mono)',
+                  color: 'var(--color-primary)',
+                }}
+              >
+                {codigoVinculacionActual || 'A3F7K2'}
+              </div>
+
+              <Button variante="secundario" onClick={generarCodigoVinculacion}>
+                <Plus size={16} />
+                <span>Nuevo</span>
+              </Button>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );

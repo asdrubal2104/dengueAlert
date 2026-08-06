@@ -218,11 +218,11 @@ export const Select: React.FC<SelectProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '4px 22px 14px 22px',
+                padding: '16px 22px',
                 borderBottom: '1px solid rgba(148, 163, 184, 0.12)',
               }}
             >
-              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-text)', letterSpacing: '-0.01em' }}>
+              <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: 'var(--color-text)', letterSpacing: '-0.01em', margin: 0 }}>
                 {labelText || 'Seleccionar opción'}
               </h3>
               <button
@@ -234,11 +234,11 @@ export const Select: React.FC<SelectProps> = ({
                 }}
                 className="touch-feedback"
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '32px',
+                  height: '32px',
                   borderRadius: '50%',
-                  backgroundColor: 'rgba(148, 163, 184, 0.14)',
-                  border: '1px solid rgba(148, 163, 184, 0.2)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
                   color: 'var(--color-text-secondary)',
                   display: 'flex',
                   alignItems: 'center',
@@ -247,7 +247,7 @@ export const Select: React.FC<SelectProps> = ({
                   flexShrink: 0,
                 }}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
