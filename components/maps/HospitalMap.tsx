@@ -48,80 +48,145 @@ export const HospitalMap: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Card style={{ backgroundColor: 'var(--color-surface-1)', border: '1px solid var(--color-border)', padding: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '12px',
-              backgroundColor: 'var(--color-primary-soft)',
-              color: 'var(--color-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <MapPin size={22} />
+      {/* Mandatory Location Request Card if location not active */}
+      {!ubicacion ? (
+        <Card
+          style={{
+            backgroundColor: 'var(--color-primary-soft)',
+            border: '2px solid var(--color-primary)',
+            borderRadius: '16px',
+            padding: '18px',
+          }}
+        >
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div
+              style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                backgroundColor: 'var(--color-primary)',
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                boxShadow: '0 4px 14px rgba(14, 165, 233, 0.3)',
+              }}
+            >
+              <Navigation size={22} className={cargandoUbi ? 'pulso-alerta' : ''} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+                📍 Permiso de Ubicación GPS Requerido
+              </h3>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: 1.45 }}>
+                Para calcular la distancia exacta en kilómetros y dirigirte al centro de salud u hospital MINSA más cercano, es necesario otorgar acceso a tu ubicación GPS.
+              </p>
+            </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'var(--color-text)' }}>
-              Hospitales y Centros de Salud Cercanos
-            </h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-              {ubicacion
-                ? 'Calculado por tu ubicación GPS en tiempo real'
-                : usuarioActual?.departamento
-                ? `Priorizando red MINSA en ${usuarioActual.departamento}`
-                : 'Mostrando principales unidades de salud MINSA'}
-            </p>
-          </div>
+
+          {errorUbi && (
+            <div
+              style={{
+                marginTop: '12px',
+                padding: '10px 12px',
+                backgroundColor: 'var(--color-danger-soft)',
+                border: '1px solid var(--color-danger)',
+                borderRadius: '10px',
+                fontSize: '0.78125rem',
+                color: 'var(--color-danger)',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                lineHeight: 1.4,
+              }}
+            >
+              <AlertCircle size={16} style={{ flexShrink: 0 }} />
+              <span>
+                {errorUbi}. Hacé clic en el botón de abajo o habilitá el permiso de ubicación en tu navegador.
+              </span>
+            </div>
+          )}
+
           <button
             type="button"
             onClick={obtenerUbicacion}
             disabled={cargandoUbi}
             style={{
-              background: 'transparent',
+              width: '100%',
+              marginTop: '14px',
+              padding: '12px 16px',
+              borderRadius: '12px',
+              backgroundColor: 'var(--color-primary)',
+              color: '#FFFFFF',
               border: 'none',
-              cursor: 'pointer',
-              color: 'var(--color-primary)',
+              fontWeight: 800,
+              fontSize: '0.875rem',
+              cursor: cargandoUbi ? 'wait' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '6px',
+              gap: '8px',
+              boxShadow: '0 4px 12px rgba(14, 165, 233, 0.35)',
             }}
-            title="Actualizar ubicación GPS"
             className="touch-feedback"
           >
-            <RefreshCw size={20} className={cargandoUbi ? 'pulso-alerta' : ''} />
+            <Navigation size={18} />
+            <span>{cargandoUbi ? 'Obteniendo GPS...' : 'Activar Ubicación GPS Ahora'}</span>
           </button>
-        </div>
-
-        {errorUbi && (
-          <div
-            style={{
-              marginTop: '12px',
-              padding: '10px 14px',
-              backgroundColor: 'rgba(245, 158, 11, 0.12)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              borderRadius: '12px',
-              fontSize: '0.8125rem',
-              color: '#F59E0B',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              lineHeight: 1.4,
-            }}
-          >
-            <AlertCircle size={18} style={{ flexShrink: 0, color: '#F59E0B' }} />
-            <span>
-              {errorUbi}. Mostrando centros de salud ordenados por departamento ({usuarioActual?.departamento || 'Nicaragua'}).
-            </span>
+        </Card>
+      ) : (
+        /* Status header when location IS active */
+        <Card style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)', padding: '14px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  backgroundColor: '#22C55E',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <MapPin size={20} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                  Ubicación GPS Activa
+                </h3>
+                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+                  Hospitales ordenados de menor a mayor distancia en tiempo real
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={obtenerUbicacion}
+              disabled={cargandoUbi}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--color-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '6px',
+              }}
+              title="Actualizar GPS"
+              className="touch-feedback"
+            >
+              <RefreshCw size={18} className={cargandoUbi ? 'pulso-alerta' : ''} />
+            </button>
           </div>
-        )}
-      </Card>
+        </Card>
+      )}
 
       {/* Lista interactiva de hospitales */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

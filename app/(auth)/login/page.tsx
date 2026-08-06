@@ -26,7 +26,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
 
-  const handleLoginReal = async (e: React.FormEvent) => {
+  const handleLoginPaciente = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -155,7 +155,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            <form onSubmit={handleLoginReal} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <form onSubmit={handleLoginPaciente} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <Input
                 etiqueta="Correo Electrónico"
                 type="email"

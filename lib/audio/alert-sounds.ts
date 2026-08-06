@@ -1,8 +1,7 @@
-// Synthesize alert tones using Web Audio API in foreground
+// Web Audio API medical-grade notification chime synthesizer
 
 let audioCtx: AudioContext | null = null;
-let activeOscillator: OscillatorNode | null = null;
-let activeGain: GainNode | null = null;
+let activeNodes: { osc: OscillatorNode; gain: GainNode }[] = [];
 
 function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
@@ -20,92 +19,85 @@ function getAudioContext(): AudioContext | null {
   return audioCtx;
 }
 
+/**
+ * Stop and clear all active audio nodes immediately.
+ */
+export function detenerAlerta() {
+  activeNodes.forEach(({ osc, gain }) => {
+    try {
+      osc.stop();
+      osc.disconnect();
+      gain.disconnect();
+    } catch {
+      // Ignore if already stopped
+    }
+  });
+  activeNodes = [];
+}
+
+/**
+ * Play a single pure sine tone with smooth attack and decay envelopes.
+ */
+function playTone(
+  ctx: AudioContext,
+  freq: number,
+  startTime: number,
+  duration: number,
+  maxGain = 0.09,
+) {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  // Pure sine wave for smooth, non-startling, pleasant audio feedback
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, startTime);
+
+  // Soft attack (20ms) and exponential decay envelope
+  gain.gain.setValueAtTime(0.001, startTime);
+  gain.gain.exponentialRampToValueAtTime(maxGain, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+
+  activeNodes.push({ osc, gain });
+}
+
+/**
+ * Gentle 2-note warm chime (C5 -> E5) for DENGUE_ALARMA
+ */
 export function reproducirAlertaWarning() {
   const ctx = getAudioContext();
   if (!ctx) return;
 
   detenerAlerta();
 
-  // Tono intermitente 800Hz (3 pulsos)
   const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(800, now);
-
-  // Pulso 1
-  gain.gain.setValueAtTime(0.3, now);
-  gain.gain.setValueAtTime(0, now + 0.2);
-
-  // Pulso 2
-  gain.gain.setValueAtTime(0.3, now + 0.3);
-  gain.gain.setValueAtTime(0, now + 0.5);
-
-  // Pulso 3
-  gain.gain.setValueAtTime(0.3, now + 0.6);
-  gain.gain.setValueAtTime(0, now + 0.8);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start(now);
-  osc.stop(now + 0.9);
-
-  activeOscillator = osc;
-  activeGain = gain;
+  playTone(ctx, 523.25, now, 0.25, 0.08); // C5
+  playTone(ctx, 659.25, now + 0.18, 0.35, 0.08); // E5
 }
 
+/**
+ * Soft 3-note medical notification sequence (C5 -> E5 -> G5) for DENGUE_GRAVE
+ */
 export function reproducirAlertaEmergency() {
   const ctx = getAudioContext();
   if (!ctx) return;
 
   detenerAlerta();
 
-  // Siren tone (alternating 1000Hz - 1400Hz)
   const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
 
-  osc.type = 'sawtooth';
+  // Pattern 1: Soft medical triad chime
+  playTone(ctx, 523.25, now, 0.2, 0.09); // C5
+  playTone(ctx, 659.25, now + 0.15, 0.2, 0.09); // E5
+  playTone(ctx, 783.99, now + 0.3, 0.35, 0.11); // G5
 
-  // Modulation
-  osc.frequency.setValueAtTime(1000, now);
-  osc.frequency.linearRampToValueAtTime(1400, now + 0.25);
-  osc.frequency.linearRampToValueAtTime(1000, now + 0.5);
-  osc.frequency.linearRampToValueAtTime(1400, now + 0.75);
-  osc.frequency.linearRampToValueAtTime(1000, now + 1.0);
-
-  gain.gain.setValueAtTime(0.4, now);
-  gain.gain.linearRampToValueAtTime(0.4, now + 2.5);
-  gain.gain.linearRampToValueAtTime(0, now + 3.0);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start(now);
-  osc.stop(now + 3.0);
-
-  activeOscillator = osc;
-  activeGain = gain;
-}
-
-export function detenerAlerta() {
-  if (activeOscillator) {
-    try {
-      activeOscillator.stop();
-      activeOscillator.disconnect();
-    } catch {
-      // Ignore if already stopped
-    }
-    activeOscillator = null;
-  }
-  if (activeGain) {
-    try {
-      activeGain.disconnect();
-    } catch {
-      // Ignore
-    }
-    activeGain = null;
-  }
+  // Gentle repeat after short pause
+  playTone(ctx, 523.25, now + 0.75, 0.2, 0.08); // C5
+  playTone(ctx, 659.25, now + 0.9, 0.2, 0.08); // E5
+  playTone(ctx, 783.99, now + 1.05, 0.35, 0.1); // G5
 }

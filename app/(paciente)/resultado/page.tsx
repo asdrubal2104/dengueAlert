@@ -84,10 +84,8 @@ export default function ResultadoEvaluacionPage() {
           <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '24px' }}>
             Realizá una evaluación seleccionando los síntomas que presentás actualmente.
           </p>
-          <Link href="/sintomas">
-            <Button variante="primario" tamano="grande">
-              Ir a evaluar mis síntomas
-            </Button>
+          <Link href="/sintomas" className="btn btn-primario btn-grande">
+            Ir a evaluar mis síntomas
           </Link>
         </Card>
       </div>
@@ -328,19 +326,20 @@ export default function ResultadoEvaluacionPage() {
           }
           target="_blank"
           rel="noopener noreferrer"
-          style={{ textDecoration: 'none' }}
+          className="btn btn-secundario"
+          style={{ textDecoration: 'none', width: '100%' }}
         >
-          <Button variante="secundario" style={{ width: '100%' }}>
-            <MapPin size={18} />
-            <span>Ver mapa de centros de salud cercanos</span>
-          </Button>
+          <MapPin size={18} />
+          <span>Ver mapa de centros de salud cercanos</span>
         </a>
 
-        <Link href="/sintomas" style={{ textDecoration: 'none' }}>
-          <Button variante="fantasma" style={{ width: '100%' }}>
-            <RefreshCw size={18} />
-            <span>Volver a evaluar</span>
-          </Button>
+        <Link 
+          href="/sintomas" 
+          className="btn btn-fantasma"
+          style={{ textDecoration: 'none', width: '100%' }}
+        >
+          <RefreshCw size={18} />
+          <span>Volver a evaluar</span>
         </Link>
       </div>
 
@@ -476,10 +475,12 @@ export default function ResultadoEvaluacionPage() {
               </div>
             </div>
 
-            <Link href="/registro" style={{ textDecoration: 'none' }}>
-              <Button variante="primario" tamano="grande" style={{ width: '100%' }}>
-                <span>Crear mi cuenta de Paciente</span>
-              </Button>
+            <Link 
+              href="/registro" 
+              className="btn btn-primario btn-grande"
+              style={{ textDecoration: 'none', width: '100%' }}
+            >
+              <span>Crear mi cuenta de Paciente</span>
             </Link>
           </div>
         </Card>
