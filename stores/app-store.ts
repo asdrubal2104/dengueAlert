@@ -66,7 +66,37 @@ export const useAppStore = create<AppState>()(
       pacientesVinculados: DEMO_PACIENTES,
       esModoDemo: true,
 
-      setUsuarioActual: (usuario) => set({ usuarioActual: usuario }),
+      setUsuarioActual: (usuario) => {
+        if (!usuario) {
+          set({ usuarioActual: null });
+          return;
+        }
+
+        const esDemoUser =
+          usuario.id === 'demo-p-001' ||
+          usuario.id === 'medico-demo-1' ||
+          usuario.id === 'paciente-demo-1';
+
+        if (esDemoUser) {
+          set({
+            usuarioActual: usuario,
+            pacientesVinculados: DEMO_PACIENTES,
+            registros: DEMO_REGISTROS,
+            alertas: DEMO_ALERTAS,
+            esModoDemo: true,
+          });
+        } else {
+          // Cuenta real iniciada o registrada: inicia en blanco para ese usuario
+          const esMismoUsuarioReal = get().usuarioActual?.id === usuario.id && !get().esModoDemo;
+          set({
+            usuarioActual: usuario,
+            pacientesVinculados: usuario.rol === 'PACIENTE' ? [usuario] : (esMismoUsuarioReal ? get().pacientesVinculados : []),
+            registros: esMismoUsuarioReal ? get().registros : [],
+            alertas: esMismoUsuarioReal ? get().alertas : [],
+            esModoDemo: false,
+          });
+        }
+      },
 
       cargarDatosDemo: () => {
         set({
@@ -88,9 +118,21 @@ export const useAppStore = create<AppState>()(
 
       iniciarSesionDemo: (rol) => {
         if (rol === 'PACIENTE') {
-          set({ usuarioActual: DEMO_PACIENTES[0] });
+          set({
+            usuarioActual: DEMO_PACIENTES[0],
+            pacientesVinculados: DEMO_PACIENTES,
+            registros: DEMO_REGISTROS,
+            alertas: DEMO_ALERTAS,
+            esModoDemo: true,
+          });
         } else {
-          set({ usuarioActual: MOCK_MEDICO });
+          set({
+            usuarioActual: MOCK_MEDICO,
+            pacientesVinculados: DEMO_PACIENTES,
+            registros: DEMO_REGISTROS,
+            alertas: DEMO_ALERTAS,
+            esModoDemo: true,
+          });
         }
       },
 
