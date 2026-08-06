@@ -60,11 +60,11 @@ export default function RegistroMedicoPage() {
     }
 
     setCargando(true);
-    const captchaToken = captchaTokenState || (await obtenerTokenTurnstile('registro_medico'));
+    const captchaToken = captchaTokenState;
     
     if (!captchaToken) {
       console.error('Fallo al obtener Token de Turnstile. Estado:', captchaTokenState);
-      setError('Fallo la verificación de seguridad (Captcha). Por favor, intenta de nuevo o recarga la página.');
+      setError('Fallo la verificación de seguridad (Captcha). Por favor, intenta de nuevo.');
       setCargando(false);
       return;
     }
@@ -215,7 +215,11 @@ export default function RegistroMedicoPage() {
                 required
               />
 
-              <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
+              <TurnstileWidget
+                onSuccess={(token) => setCaptchaTokenState(token)}
+                onExpire={() => setCaptchaTokenState(undefined)}
+                onError={() => setCaptchaTokenState(undefined)}
+              />
 
               <Button type="submit" variante="primario" tamano="grande" disabled={cargando || !captchaTokenState} style={{ marginTop: '8px', width: '100%' }}>
                 <span>{cargando ? 'Registrando...' : 'Registrarme como Médico'}</span>

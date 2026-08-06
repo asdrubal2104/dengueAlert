@@ -31,7 +31,12 @@ export const TurnstileWidget: React.FC<TurnstileWidgetProps> = ({ onSuccess, onE
             sitekey: siteKey,
             callback: (token: string) => callbacksRef.current.onSuccess(token),
             'error-callback': () => callbacksRef.current.onError?.(),
-            'expired-callback': () => callbacksRef.current.onExpire?.(),
+            'expired-callback': () => {
+              callbacksRef.current.onExpire?.();
+              if (widgetId && window.turnstile?.reset) {
+                window.turnstile.reset(widgetId);
+              }
+            },
           });
         } catch (e) {
           console.error('Error rendering Turnstile widget:', e);

@@ -179,7 +179,11 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
+              <TurnstileWidget
+                onSuccess={(token) => setCaptchaTokenState(token)}
+                onExpire={() => setCaptchaTokenState(undefined)}
+                onError={() => setCaptchaTokenState(undefined)}
+              />
 
               <Button
                 variante="primario"

@@ -63,11 +63,11 @@ export default function RegistroPacientePage() {
     }
 
     setCargando(true);
-    const captchaToken = captchaTokenState || (await obtenerTokenTurnstile('registro_paciente'));
+    const captchaToken = captchaTokenState;
     
     if (!captchaToken) {
       console.error('Fallo al obtener Token de Turnstile. Estado:', captchaTokenState);
-      setError('Fallo la verificación de seguridad (Captcha). Por favor, intenta de nuevo o recarga la página.');
+      setError('Fallo la verificación de seguridad (Captcha). Por favor, intenta de nuevo.');
       setCargando(false);
       return;
     }
@@ -222,7 +222,11 @@ export default function RegistroPacientePage() {
                   opciones={DEPARTAMENTOS_NICARAGUA}
                 />
 
-                <TurnstileWidget onSuccess={(token) => setCaptchaTokenState(token)} />
+                <TurnstileWidget
+                  onSuccess={(token) => setCaptchaTokenState(token)}
+                  onExpire={() => setCaptchaTokenState(undefined)}
+                  onError={() => setCaptchaTokenState(undefined)}
+                />
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
                   <Button
