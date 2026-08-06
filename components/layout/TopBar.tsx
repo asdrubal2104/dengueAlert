@@ -55,7 +55,9 @@ export const TopBar: React.FC<TopBarProps> = ({ titulo }) => {
             >
               <Stethoscope size={13} />
               <span>
-                MINSA {usuarioActual?.codigoMinsa ? `#${usuarioActual.codigoMinsa.replace(/^MINSA-?/i, '')}` : 'Médico'}
+                {usuarioActual?.codigoMinsa
+                  ? `MINSA #${usuarioActual.codigoMinsa.replace(/^MINSA-?/i, '').replace(/^#/i, '')}`
+                  : 'Médico MINSA'}
               </span>
             </span>
           ) : rol === 'PACIENTE' ? (

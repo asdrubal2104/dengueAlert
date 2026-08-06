@@ -13,6 +13,7 @@ import {
   ArrowRight,
   Plus,
   Activity,
+  ShieldCheck,
 } from 'lucide-react';
 
 export default function DoctorDashboardPage() {
@@ -42,47 +43,49 @@ export default function DoctorDashboardPage() {
         }}
       >
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div
-                style={{
-                  width: '46px',
-                  height: '46px',
-                  borderRadius: '14px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                <Stethoscope size={24} />
-              </div>
-              <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '14px',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backdropFilter: 'blur(8px)',
+                flexShrink: 0,
+              }}
+            >
+              <Stethoscope size={24} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}>
                   {usuarioActual?.nombreCompleto || 'Dr. Juan Carlos Pérez López'}
                 </h2>
-                <span style={{ fontSize: '0.8125rem', color: '#E0F2FE', opacity: 0.9 }}>
-                  {usuarioActual?.especialidad || 'Medicina Interna'} • {usuarioActual?.unidadDeSalud || 'Hospital Escuela Manolo Morales'}
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '2px 8px',
+                    borderRadius: '999px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    backdropFilter: 'blur(6px)',
+                  }}
+                >
+                  <ShieldCheck size={12} />
+                  <span>Médico Verificado</span>
                 </span>
               </div>
+              <div style={{ fontSize: '0.8125rem', color: '#E0F2FE', opacity: 0.95, marginTop: '4px' }}>
+                {usuarioActual?.especialidad || 'Medicina Interna'} • {usuarioActual?.unidadDeSalud || 'Hospital Escuela Manolo Morales'}
+              </div>
             </div>
-
-            <span
-              style={{
-                padding: '5px 12px',
-                borderRadius: '999px',
-                backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                color: '#FFFFFF',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(8px)',
-              }}
-            >
-              MINSA #{usuarioActual?.codigoMinsa || '48291'}
-            </span>
           </div>
         </div>
 

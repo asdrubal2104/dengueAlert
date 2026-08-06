@@ -98,7 +98,7 @@ export default function PerfilMedicoPage() {
           </p>
 
           <div style={{ marginTop: '12px', display: 'inline-flex', padding: '4px 12px', borderRadius: '999px', backgroundColor: 'rgba(255, 255, 255, 0.2)', fontSize: '0.75rem', fontWeight: 800 }}>
-            Código MINSA: {codigoMinsa}
+            Código MINSA: #{codigoMinsa.replace(/^MINSA-?/i, '').replace(/^#/i, '')}
           </div>
         </div>
 
