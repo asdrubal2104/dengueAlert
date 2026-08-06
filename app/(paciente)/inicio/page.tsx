@@ -140,9 +140,9 @@ export default function InicioPacientePage() {
       )}
 
       {/* Quick Action Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-        <Link href="/historial" style={{ textDecoration: 'none' }}>
-          <Card interactive style={{ height: '100%', padding: '18px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', height: '100%' }}>
+        <Link href="/historial" style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+          <Card interactive style={{ height: '100%', padding: '18px', display: 'flex', flexDirection: 'column' }}>
             <div
               style={{
                 width: '42px',
@@ -162,14 +162,14 @@ export default function InicioPacientePage() {
             <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, marginBottom: '4px', color: 'var(--color-text)' }}>
               Mi Historial
             </h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.35 }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.35, flexGrow: 1 }}>
               Revisá tus evaluaciones pasadas
             </p>
           </Card>
         </Link>
 
-        <Link href="/mi-medico" style={{ textDecoration: 'none' }}>
-          <Card interactive style={{ height: '100%', padding: '18px' }}>
+        <Link href="/mi-medico" style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+          <Card interactive style={{ height: '100%', padding: '18px', display: 'flex', flexDirection: 'column' }}>
             <div
               style={{
                 width: '42px',
@@ -189,7 +189,7 @@ export default function InicioPacientePage() {
             <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, marginBottom: '4px', color: 'var(--color-text)' }}>
               Mi Médico
             </h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.35 }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.35, flexGrow: 1 }}>
               Vinculate con tu doctor MINSA
             </p>
           </Card>
@@ -197,7 +197,7 @@ export default function InicioPacientePage() {
       </div>
 
       {/* Emergency Contacts Card */}
-      <Card style={{ border: '1px solid rgba(239, 68, 68, 0.35)', backgroundColor: 'rgba(239, 68, 68, 0.08)', padding: '20px' }}>
+      <Card style={{ border: '1px solid rgba(239, 68, 68, 0.35)', backgroundColor: 'rgba(239, 68, 68, 0.08)', padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
           <div
             style={{
