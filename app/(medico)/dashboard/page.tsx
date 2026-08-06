@@ -65,25 +65,49 @@ export default function DoctorDashboardPage() {
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}>
                   {usuarioActual?.nombreCompleto || 'Dr. Juan Carlos Pérez López'}
                 </h2>
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '2px 8px',
-                    borderRadius: '999px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    fontSize: '0.6875rem',
-                    fontWeight: 700,
-                    backdropFilter: 'blur(6px)',
-                  }}
-                >
-                  <ShieldCheck size={12} />
-                  <span>Médico Verificado</span>
-                </span>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '2px' }}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '3px 8px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      fontSize: '0.6875rem',
+                      fontWeight: 700,
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      color: '#E0F2FE'
+                    }}
+                  >
+                    <ShieldCheck size={12} style={{ color: '#38BDF8' }} />
+                    <span>Verificado</span>
+                  </span>
+                  
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '3px 8px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(14, 165, 233, 0.3)',
+                      fontSize: '0.6875rem',
+                      fontWeight: 800,
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(14, 165, 233, 0.4)',
+                      color: '#FFFFFF'
+                    }}
+                  >
+                    <span style={{ opacity: 0.8, fontWeight: 600 }}>MINSA</span>
+                    <span>#{usuarioActual?.codigoMinsa ? usuarioActual.codigoMinsa.replace(/^MINSA-?/i, '').replace(/^#/i, '') : '48291'}</span>
+                  </span>
+                </div>
               </div>
-              <div style={{ fontSize: '0.8125rem', color: '#E0F2FE', opacity: 0.95, marginTop: '4px' }}>
-                {usuarioActual?.especialidad || 'Medicina Interna'} • {usuarioActual?.unidadDeSalud || 'Hospital Escuela Manolo Morales'}
+              <div style={{ fontSize: '0.8125rem', color: '#E0F2FE', opacity: 0.9, marginTop: '8px', lineHeight: 1.4 }}>
+                {usuarioActual?.especialidad || 'Medicina Interna'} <br/>
+                <span style={{ opacity: 0.7 }}>{usuarioActual?.unidadDeSalud || 'Hospital Escuela Manolo Morales'}</span>
               </div>
             </div>
           </div>

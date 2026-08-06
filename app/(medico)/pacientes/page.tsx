@@ -59,41 +59,54 @@ export default function DirectoryPacientesPage() {
             <Link key={paciente.id} href={`/pacientes/${paciente.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Card interactive style={{ padding: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flex: 1, minWidth: 0 }}>
                     <div
                       style={{
                         width: '44px',
                         height: '44px',
-                        borderRadius: '50%',
-                        backgroundColor: 'var(--color-surface-1)',
+                        borderRadius: '12px',
+                        backgroundColor: 'rgba(14, 165, 233, 0.1)',
                         color: 'var(--color-primary)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontWeight: 800,
-                        fontSize: '1rem',
-                        border: '1px solid var(--color-border)',
+                        fontSize: '1.125rem',
+                        border: '1px solid rgba(14, 165, 233, 0.2)',
                         flexShrink: 0,
                       }}
                     >
                       {paciente.nombreCompleto ? paciente.nombreCompleto.charAt(0).toUpperCase() : 'P'}
                     </div>
 
-                    <div style={{ minWidth: 0 }}>
-                      <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: '2px' }}>
+                    <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '2px' }}>
+                      <h3 style={{ 
+                        fontSize: '0.9375rem', 
+                        fontWeight: 800, 
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        color: 'var(--color-text)',
+                        lineHeight: 1.2
+                      }}>
                         {paciente.nombreCompleto}
                       </h3>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-                        <MapPin size={13} />
-                        <span>{paciente.departamento || 'Nicaragua'}</span>
-                        <span>• Sangre: {paciente.tipoSangre || 'N/A'}</span>
+                      
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+                        <MapPin size={12} style={{ flexShrink: 0 }} />
+                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{paciente.departamento || 'Nicaragua'}</span>
+                        <span style={{ margin: '0 2px' }}>•</span>
+                        <span style={{ fontWeight: 600, color: 'var(--color-text-muted)' }}>{paciente.tipoSangre || 'N/A'}</span>
+                      </div>
+
+                      <div style={{ marginTop: '4px' }}>
+                        <Badge tipo={clasificacion} />
                       </div>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-                    <Badge tipo={clasificacion} />
-                    <ChevronRight size={18} style={{ color: 'var(--color-text-muted)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', height: '44px', paddingLeft: '8px' }}>
+                    <ChevronRight size={20} style={{ color: 'var(--color-text-muted)' }} />
                   </div>
                 </div>
               </Card>
