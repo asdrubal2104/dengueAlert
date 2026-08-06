@@ -50,7 +50,7 @@ export default function DirectoryPacientesPage() {
         />
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div className="grid-listas">
         {pacientesFiltrados.map((paciente) => {
           const evalPaciente = registros.find((e) => e.pacienteId === paciente.id);
           const clasificacion = evalPaciente?.clasificacion || 'BAJO_RIESGO';

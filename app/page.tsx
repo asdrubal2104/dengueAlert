@@ -138,7 +138,7 @@ export default function LandingPage() {
         </div>
 
         {/* 3 Pillars Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="grid-listas">
           <Card style={{ backgroundColor: 'var(--color-surface-0)', padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
               <div

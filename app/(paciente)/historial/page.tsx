@@ -49,7 +49,7 @@ export default function HistorialPacientePage() {
           </Link>
         </Card>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="grid-listas">
           {registros.map((reg) => {
             const fecha = new Date(reg.fechaRegistro);
             const fechaFormateada = fecha.toLocaleDateString('es-NI', {
@@ -65,43 +65,53 @@ export default function HistorialPacientePage() {
                 <div
                   style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    gap: '10px',
-                    flexWrap: 'wrap',
+                    flexDirection: 'column',
+                    gap: '8px',
                     borderBottom: '1px solid var(--color-border)',
                     paddingBottom: '12px',
-                    marginBottom: '4px'
+                    marginBottom: '4px',
                   }}
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: 0 }}>
-                    <Badge clasificacion={reg.clasificacion} />
-                    <div
-                      style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--color-text-muted)',
-                      }}
-                    >
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
-                        <Calendar size={12} />
-                        <span suppressHydrationWarning>{fechaFormateada}</span>
-                      </span>
-                    </div>
-                  </div>
-                  <span
+                  <div
                     style={{
-                      fontSize: '0.8rem',
-                      background: 'var(--color-surface-1)',
-                      padding: '4px 10px',
-                      borderRadius: '9999px',
-                      fontWeight: 700,
-                      color: 'var(--color-text)',
-                      boxShadow: 'var(--shadow-sm)',
-                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '8px',
+                      flexWrap: 'wrap',
                     }}
                   >
-                    Día {reg.diasConSintomas} • {reg.faseDengue === 'CRITICA' || (reg.diasConSintomas >= 3 && reg.diasConSintomas <= 6) ? 'Fase Crítica' : reg.faseDengue === 'RECUPERACION' || reg.diasConSintomas >= 7 ? 'Recuperación' : 'Fase Febril'}
-                  </span>
+                    <Badge clasificacion={reg.clasificacion} />
+                    <span
+                      style={{
+                        fontSize: '0.78125rem',
+                        background: 'var(--color-surface-1)',
+                        padding: '4px 10px',
+                        borderRadius: '9999px',
+                        fontWeight: 700,
+                        color: 'var(--color-text)',
+                        border: '1px solid var(--color-border)',
+                        boxShadow: 'var(--shadow-sm)',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Día {reg.diasConSintomas} • {reg.faseDengue === 'CRITICA' || (reg.diasConSintomas >= 3 && reg.diasConSintomas <= 6) ? 'Fase Crítica' : reg.faseDengue === 'RECUPERACION' || reg.diasConSintomas >= 7 ? 'Recuperación' : 'Fase Febril'}
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    <Calendar size={13} />
+                    <span suppressHydrationWarning>{fechaFormateada}</span>
+                  </div>
                 </div>
 
                 <div>

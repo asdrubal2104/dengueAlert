@@ -77,7 +77,7 @@ export const HospitalMap: React.FC = () => {
             </div>
             <div style={{ flex: 1 }}>
               <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
-                📍 Permiso de Ubicación GPS Requerido
+                Permiso de Ubicación GPS Requerido
               </h3>
               <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: 1.45 }}>
                 Para calcular la distancia exacta en kilómetros y dirigirte al centro de salud u hospital MINSA más cercano, es necesario otorgar acceso a tu ubicación GPS.
@@ -189,7 +189,7 @@ export const HospitalMap: React.FC = () => {
       )}
 
       {/* Lista interactiva de hospitales */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div className="grid-listas">
         {hospitales.map((hosp) => (
           <Card key={hosp.id} style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

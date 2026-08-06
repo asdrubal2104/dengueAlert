@@ -136,7 +136,7 @@ export default function PerfilMedicoPage() {
         </div>
       )}
 
-      <form onSubmit={handleGuardar} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <form onSubmit={handleGuardar} className="grid-responsive-2col">
         {/* Personal & Credential Info */}
         <Card>
           <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -192,7 +192,7 @@ export default function PerfilMedicoPage() {
         </Card>
 
         {/* Contact Info */}
-        <Card>
+        <Card className="grid-col-full">
           <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Phone size={18} style={{ color: 'var(--color-primary)' }} />
             <span>Contacto Institucional</span>
@@ -214,20 +214,22 @@ export default function PerfilMedicoPage() {
           />
         </Card>
 
-        <Button variante="primario" tamano="grande" type="submit" style={{ width: '100%' }}>
-          <Save size={18} />
-          <span>Guardar Cambios de Perfil</span>
-        </Button>
+        <div className="grid-col-full" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <Button variante="primario" tamano="grande" type="submit" style={{ width: '100%' }}>
+            <Save size={18} />
+            <span>Guardar Cambios de Perfil</span>
+          </Button>
 
-        <Button
-          variante="fantasma"
-          type="button"
-          onClick={handleCerrarSesion}
-          style={{ width: '100%', color: 'var(--color-danger)' }}
-        >
-          <LogOut size={18} />
-          <span>Cerrar Sesión del Médico</span>
-        </Button>
+          <Button
+            variante="fantasma"
+            type="button"
+            onClick={handleCerrarSesion}
+            style={{ width: '100%', color: 'var(--color-danger)' }}
+          >
+            <LogOut size={18} />
+            <span>Cerrar Sesión del Médico</span>
+          </Button>
+        </div>
       </form>
     </div>
   );

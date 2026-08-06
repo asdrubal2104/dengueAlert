@@ -15,7 +15,7 @@ export const TopBar: React.FC<TopBarProps> = ({ titulo }) => {
 
   return (
     <header className="topbar">
-      <div style={{ maxWidth: '560px', width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="topbar-content">
         <Link href={rol === 'MEDICO' ? '/dashboard' : '/inicio'} className="topbar__logo touch-feedback">
           <div
             style={{

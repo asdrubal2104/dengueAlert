@@ -78,7 +78,7 @@ const ToastItem: React.FC<ToastProps> = ({ toast, onDismiss }) => {
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
         fontSize: '0.875rem',
         fontWeight: 700,
-        maxWidth: '360px',
+        maxWidth: '440px',
         width: 'calc(100vw - 32px)',
         transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.95)',
@@ -179,7 +179,7 @@ export const ToastContainer: React.FC = () => {
     <div
       style={{
         position: 'fixed',
-        bottom: '84px',
+        bottom: '100px',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 9000,

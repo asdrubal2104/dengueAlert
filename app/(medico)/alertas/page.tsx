@@ -33,7 +33,7 @@ export default function AlertasMedicoPage() {
           </p>
         </Card>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="grid-listas">
           {alertas.map((alerta) => (
             <Card
               key={alerta.id}

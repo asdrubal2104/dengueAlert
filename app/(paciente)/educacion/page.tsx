@@ -104,10 +104,17 @@ const ARTICULOS: ArticuloEducativo[] = [
 ];
 
 export default function EducacionPage() {
-  const [articuloAbierto, setArticuloAbierto] = useState<string>('que-es-dengue');
+  const [articulosAbiertos, setArticulosAbiertos] = useState<string[]>([
+    'que-es-dengue',
+    'cuidados-hogar',
+    'signos-alarma',
+    'prevencion-criaderos',
+  ]);
 
   const toggleArticulo = (id: string) => {
-    setArticuloAbierto((prev) => (prev === id ? '' : id));
+    setArticulosAbiertos((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
   };
 
   const getCategoriaBadgeStyle = (cat: ArticuloEducativo['categoria']) => {
@@ -137,13 +144,13 @@ export default function EducacionPage() {
         </h2>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <div className="grid-listas">
         {ARTICULOS.map((art) => {
-          const abierto = articuloAbierto === art.id;
+          const abierto = articulosAbiertos.includes(art.id);
           const badge = getCategoriaBadgeStyle(art.categoria);
 
           return (
-            <Card key={art.id} style={{ padding: 0, overflow: 'hidden' }}>
+            <Card key={art.id} style={{ padding: 0, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
               <button
                 type="button"
                 onClick={() => toggleArticulo(art.id)}

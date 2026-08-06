@@ -30,9 +30,10 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
 
   useEffect(() => {
     setMounted(true);
-    // Lock body scroll while overlay is active
+    // Lock body scroll while overlay is active and hide nav bars
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('alert-overlay-active');
 
     if (clasificacion === 'DENGUE_GRAVE') {
       reproducirAlertaEmergency();
@@ -42,6 +43,7 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
 
     return () => {
       document.body.style.overflow = originalOverflow;
+      document.body.classList.remove('alert-overlay-active');
       detenerAlerta();
     };
   }, [clasificacion]);
@@ -82,8 +84,13 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
     <div
       style={{
         position: 'fixed',
-        inset: 0,
-        zIndex: 10000,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 999999,
         background: bgColor,
         color: '#ffffff',
         padding: 'max(16px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom)) 16px',
@@ -97,6 +104,7 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
     >
       {/* Header controls */}
       <div
+        className="alert-overlay-container"
         style={{
           width: '100%',
           maxWidth: '440px',
@@ -152,7 +160,19 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
       </div>
 
       {/* Main warning content */}
-      <div style={{ textAlign: 'center', margin: '4px 0', maxWidth: '440px', width: '100%', flex: '1 1 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div
+        className="alert-overlay-container"
+        style={{
+          textAlign: 'center',
+          margin: '4px 0',
+          maxWidth: '440px',
+          width: '100%',
+          flex: '1 1 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
         <div
           style={{
             marginBottom: '8px',
@@ -162,8 +182,8 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
         >
           <div
             style={{
-              width: '56px',
-              height: '56px',
+              width: '64px',
+              height: '64px',
               borderRadius: '50%',
               backgroundColor: 'rgba(255, 255, 255, 0.2)',
               border: '2px solid rgba(255, 255, 255, 0.4)',
@@ -174,72 +194,84 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
             }}
             className="pulso-alerta"
           >
-            {esGrave ? <Siren size={30} color="#FFFFFF" /> : <AlertTriangle size={30} color="#FFFFFF" />}
+            {esGrave ? <Siren size={34} color="#FFFFFF" /> : <AlertTriangle size={34} color="#FFFFFF" />}
           </div>
         </div>
 
-        <h1 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '6px', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
           {esGrave ? '¡EMERGENCIA MÉDICA: SÍNTOMAS GRAVES!' : '¡ATENCIÓN: SIGNOS DE ALARMA!'}
         </h1>
 
-        <p style={{ fontSize: '0.8125rem', opacity: 0.95, lineHeight: 1.35, marginBottom: '10px', color: '#FFF' }}>
+        <p style={{ fontSize: '0.9375rem', opacity: 0.95, lineHeight: 1.4, marginBottom: '14px', color: '#FFF' }}>
           {esGrave
             ? 'Presentás síntomas compatibles con sospecha de dengue grave. Acudí INMEDIATAMENTE a un centro de salud u hospital.'
             : 'Se detectaron signos de alarma que indican riesgo de complicación. Necesitás valoración médica presencial hoy.'}
         </p>
 
-        {sintomasCriticos.length > 0 && (
-          <div
-            style={{
-              background: 'rgba(0, 0, 0, 0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              borderRadius: '12px',
-              padding: '10px 14px',
-              textAlign: 'left',
-              marginBottom: '8px',
-            }}
-          >
-            <span
+        <div className="alert-cards-grid" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {sintomasCriticos.length > 0 && (
+            <div
               style={{
-                fontSize: '0.6875rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                opacity: 0.85,
-                fontWeight: 800,
-                color: '#FFF',
-                display: 'block',
-                marginBottom: '4px',
+                background: 'rgba(0, 0, 0, 0.2)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                textAlign: 'left',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
               }}
             >
-              Signos de alarma detectados:
-            </span>
-            <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '0.8125rem', lineHeight: 1.35 }}>
-              {sintomasCriticos.map((s, idx) => (
-                <li key={idx} style={{ fontWeight: 700 }}>
-                  {s}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+              <span
+                style={{
+                  fontSize: '0.6875rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  opacity: 0.85,
+                  fontWeight: 800,
+                  color: '#FFF',
+                  display: 'block',
+                  marginBottom: '4px',
+                }}
+              >
+                Signos de alarma detectados:
+              </span>
+              <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '0.8125rem', lineHeight: 1.35 }}>
+                {sintomasCriticos.map((s, idx) => (
+                  <li key={idx} style={{ fontWeight: 700 }}>
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-        <div
-          style={{
-            background: 'rgba(255, 255, 255, 0.15)',
-            border: '1px solid rgba(255, 255, 255, 0.25)',
-            borderRadius: '10px',
-            padding: '8px 12px',
-            fontSize: '0.75rem',
-            textAlign: 'center',
-            lineHeight: 1.35,
-          }}
-        >
-          <strong style={{ color: '#FFF' }}>RECOMENDACIÓN CRÍTICA:</strong> No tomés aspirina ni ibuprofeno. Mantenete hidratado/a con vida suero oral.
+          <div
+            style={{
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              fontSize: '0.8125rem',
+              textAlign: 'center',
+              lineHeight: 1.4,
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div>
+              <strong style={{ color: '#FFF' }}>RECOMENDACIÓN CRÍTICA:</strong> No tomés aspirina ni ibuprofeno. Mantenete hidratado/a con vida suero oral.
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Action buttons */}
       <div
+        className="alert-overlay-container"
         style={{
           width: '100%',
           maxWidth: '440px',

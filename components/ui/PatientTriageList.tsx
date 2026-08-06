@@ -35,7 +35,7 @@ export function PatientTriageList({ pacientes, registros }: PatientTriageListPro
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div className="grid-listas">
       {sortedPacientes.map((paciente) => {
         const evaluacionReciente = registros.find((r) => r.pacienteId === paciente.id) || registros[0];
         const clasificacion = evaluacionReciente?.clasificacion || 'BAJO_RIESGO';

@@ -28,9 +28,10 @@ export default function DoctorDashboardPage() {
   const alertasCriticas = alertas.filter((a) => a.tipo === 'EMERGENCY' || a.tipo === 'WARNING');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
+    <div className="grid-responsive-2col slide-up">
       {/* Credential Header Card */}
       <div
+        className="grid-col-full"
         style={{
           background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 50%, #075985 100%)',
           borderRadius: '24px',
@@ -128,7 +129,7 @@ export default function DoctorDashboardPage() {
       </div>
 
       {/* KPI Stats Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+      <div className="grid-col-full" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
         <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
           <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'var(--font-mono)' }}>
             {totalPacientes}

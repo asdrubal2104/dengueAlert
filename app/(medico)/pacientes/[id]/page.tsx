@@ -56,8 +56,8 @@ export default function DetallePacientePage({ params }: { params: { id: string }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <div className="grid-responsive-2col slide-up">
+      <div className="grid-col-full" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <Link href="/pacientes" style={{ color: 'var(--color-text-secondary)' }}>
           <ArrowLeft size={22} />
         </Link>
@@ -72,7 +72,7 @@ export default function DetallePacientePage({ params }: { params: { id: string }
       </div>
 
       {/* Patient Header Card */}
-      <Card style={{ padding: '20px' }}>
+      <Card className="grid-col-full" style={{ padding: '20px' }}>
         {/* Card Top Row: ID & Status Badge */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', gap: '8px', flexWrap: 'wrap' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -130,7 +130,7 @@ export default function DetallePacientePage({ params }: { params: { id: string }
       </Card>
 
       {/* Clinical Metrics Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+      <div className="grid-col-full" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
         <Card style={{ padding: '12px 6px', textAlign: 'center' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>Sangre</div>
           <div style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-danger)', fontFamily: 'var(--font-mono)' }}>

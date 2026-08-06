@@ -128,7 +128,7 @@ export default function MiMedicoPage() {
           Médicos autorizados ({medicosVinculados.length}):
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="grid-listas">
           {medicosVinculados.map((m) => (
             <Card key={m.id} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '16px' }}>
               <div

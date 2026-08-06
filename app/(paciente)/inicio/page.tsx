@@ -26,9 +26,10 @@ export default function InicioPacientePage() {
   const ultimaEvaluacion = registros[0];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
+    <div className="grid-responsive-2col slide-up">
       {/* Hero Welcome Banner */}
       <div
+        className="grid-col-full"
         style={{
           background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 50%, #075985 100%)',
           borderRadius: '24px',
@@ -81,7 +82,7 @@ export default function InicioPacientePage() {
 
       {/* Last Evaluation Summary */}
       {ultimaEvaluacion ? (
-        <Card interactive style={{ position: 'relative', padding: '18px' }}>
+        <Card interactive className="grid-col-full" style={{ position: 'relative', padding: '18px' }}>
           <Link href="/resultado" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

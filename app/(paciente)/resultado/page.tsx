@@ -128,7 +128,7 @@ export default function ResultadoEvaluacionPage() {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="slide-up">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} className="slide-up">
       {/* Auto-Triggered Full-Screen Alert Modal on Emergency */}
       {mostrarOverlay && (
         <AlertOverlay
@@ -142,8 +142,7 @@ export default function ResultadoEvaluacionPage() {
         />
       )}
 
-
-      {/* Hero Banner Header (Matching Inicio style) */}
+      {/* Hero Banner Header */}
       <div
         style={{
           background,
@@ -205,6 +204,7 @@ export default function ResultadoEvaluacionPage() {
         />
       </div>
 
+      {/* Urgent Action Callout */}
       <Card
         style={{
           padding: '18px 20px',
@@ -245,66 +245,111 @@ export default function ResultadoEvaluacionPage() {
         </div>
       </Card>
 
-      {/* Clinical Risk Score Card (Extracted to maintain high contrast) */}
-      <Card style={{ padding: '18px 20px' }}>
-        <RiskGauge score={resultado.riskScore} clasificacion={resultado.clasificacion} />
-      </Card>
+      {/* Primary Action Buttons Card (Fila Horizontal en Tablet, Apilado en Móvil) */}
+      <Card style={{ padding: '20px' }}>
+        <div className="grid-acciones-tablet">
+          {esEmergencia && (
+            <Button
+              variante="peligro"
+              tamano="grande"
+              onClick={() => setMostrarOverlay(true)}
+              style={{ width: '100%' }}
+            >
+              <AlertTriangle size={20} />
+              <span>ABRIR ALERTA Y BUSCAR HOSPITAL MINSA</span>
+            </Button>
+          )}
 
-      {/* WHO Clinical Phase Card */}
-      <Card
-        style={{
-          padding: '18px 20px',
-          backgroundColor:
-            resultado.faseTemporal === 'CRITICA'
-              ? 'rgba(245, 158, 11, 0.1)'
-              : resultado.faseTemporal === 'RECUPERACION'
-              ? 'rgba(16, 185, 129, 0.1)'
-              : 'rgba(14, 165, 233, 0.1)',
-          border:
-            resultado.faseTemporal === 'CRITICA'
-              ? '1px solid rgba(245, 158, 11, 0.35)'
-              : resultado.faseTemporal === 'RECUPERACION'
-              ? '1px solid rgba(16, 185, 129, 0.35)'
-              : '1px solid rgba(14, 165, 233, 0.35)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div
-            style={{
-              padding: '8px 12px',
-              borderRadius: '12px',
-              fontWeight: 800,
-              fontSize: '0.8125rem',
-              color:
-                resultado.faseTemporal === 'CRITICA'
-                  ? '#FBBF24'
-                  : resultado.faseTemporal === 'RECUPERACION'
-                  ? '#34D399'
-                  : '#38BDF8',
-              backgroundColor: 'var(--color-surface-1)',
-              border: '1px solid var(--color-border)',
-              flexShrink: 0,
-            }}
+          <Link
+            href="/alerta"
+            className="btn btn-secundario"
+            style={{ textDecoration: 'none', width: '100%' }}
           >
-            {resultado.faseTemporal === 'FEBRIL' && '🌡️ Fase Febril'}
-            {resultado.faseTemporal === 'CRITICA' && '⚠️ Fase Crítica'}
-            {resultado.faseTemporal === 'RECUPERACION' && '💚 Fase Recuperación'}
-          </div>
-          <div>
-            <div style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-text)' }}>
-              Etapa evaluada: {ultimaEvaluacion.diasConSintomas} día(s) con síntomas
-            </div>
-            <div style={{ fontSize: '0.78125rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-              {resultado.faseTemporal === 'FEBRIL' &&
-                'Típica de los primeros 1-3 días con fiebre alta. Requiere hidratación activa y monitoreo.'}
-              {resultado.faseTemporal === 'CRITICA' &&
-                'Ocurre típicamente entre días 3 y 6. Período de mayor cuidado por riesgo de fuga plasmática.'}
-              {resultado.faseTemporal === 'RECUPERACION' &&
-                'Días 7+. Etapa de reabsorción de líquidos y estabilización paulatina del organismo.'}
-            </div>
-          </div>
+            <MapPin size={18} />
+            <span>{resultado.nivelAtencion === 'ATENCION_HOY' ? 'Activar GPS y buscar centro de salud para hoy' : 'Ver mapa de centros de salud cercanos'}</span>
+          </Link>
+
+          <Link 
+            href="/sintomas" 
+            className="btn btn-fantasma"
+            style={{ textDecoration: 'none', width: '100%' }}
+          >
+            <RefreshCw size={18} />
+            <span>Volver a evaluar</span>
+          </Link>
         </div>
       </Card>
+
+      {/* Clinical Details Micro-Grid (2 Columnas en Tablet) */}
+      <div className="grid-responsive-2col">
+        {/* Clinical Risk Score Card */}
+        <Card style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <RiskGauge score={resultado.riskScore} clasificacion={resultado.clasificacion} />
+        </Card>
+
+        {/* WHO Clinical Phase Card */}
+        <Card
+          style={{
+            padding: '20px',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            backgroundColor:
+              resultado.faseTemporal === 'CRITICA'
+                ? 'rgba(245, 158, 11, 0.1)'
+                : resultado.faseTemporal === 'RECUPERACION'
+                ? 'rgba(16, 185, 129, 0.1)'
+                : 'rgba(14, 165, 233, 0.1)',
+            border:
+              resultado.faseTemporal === 'CRITICA'
+                ? '1px solid rgba(245, 158, 11, 0.35)'
+                : resultado.faseTemporal === 'RECUPERACION'
+                ? '1px solid rgba(16, 185, 129, 0.35)'
+                : '1px solid rgba(14, 165, 233, 0.35)',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '12px', width: '100%' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: '12px',
+                fontWeight: 800,
+                fontSize: '0.8125rem',
+                color:
+                  resultado.faseTemporal === 'CRITICA'
+                    ? '#FBBF24'
+                    : resultado.faseTemporal === 'RECUPERACION'
+                    ? '#34D399'
+                    : '#38BDF8',
+                backgroundColor: 'var(--color-surface-1)',
+                border: '1px solid var(--color-border)',
+                alignSelf: 'flex-start',
+              }}
+            >
+              {resultado.faseTemporal === 'FEBRIL' && '🌡️ Fase Febril'}
+              {resultado.faseTemporal === 'CRITICA' && '⚠️ Fase Crítica'}
+              {resultado.faseTemporal === 'RECUPERACION' && '💚 Fase Recuperación'}
+            </span>
+            <div>
+              <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+                Etapa evaluada: {ultimaEvaluacion.diasConSintomas} día(s) con síntomas
+              </h3>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: 1.45, margin: 0 }}>
+                {resultado.faseTemporal === 'FEBRIL' &&
+                  'Típica de los primeros 1-3 días con fiebre alta. Requiere hidratación activa y monitoreo.'}
+                {resultado.faseTemporal === 'CRITICA' &&
+                  'Ocurre típicamente entre días 3 y 6. Período de mayor cuidado por riesgo de fuga plasmática.'}
+                {resultado.faseTemporal === 'RECUPERACION' &&
+                  'Días 7+. Etapa de reabsorción de líquidos y estabilización paulatina del organismo.'}
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       {resultado.advertenciaFaseCritica && (
         <Card style={{ padding: '16px 18px', backgroundColor: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.45)' }}>
@@ -317,7 +362,7 @@ export default function ResultadoEvaluacionPage() {
         </Card>
       )}
 
-      {/* Medication Warning Box (Refined matching Emergency Contact design in Inicio) */}
+      {/* Medication Warning Box (Full Width) */}
       <Card
         style={{
           backgroundColor: 'rgba(239, 68, 68, 0.08)',
@@ -371,44 +416,37 @@ export default function ResultadoEvaluacionPage() {
         </div>
       </Card>
 
-      {/* Action Buttons Area */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {esEmergencia && (
-          <Button
-            variante="peligro"
-            tamano="grande"
-            onClick={() => setMostrarOverlay(true)}
-            style={{ width: '100%' }}
-          >
-            <AlertTriangle size={20} />
-            <span>ABRIR ALERTA Y BUSCAR HOSPITAL MINSA</span>
-          </Button>
-        )}
+      {/* Reported Symptoms Pills (Full Width) */}
+      <Card style={{ padding: '20px' }}>
+        <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, marginBottom: '14px', color: 'var(--color-text)' }}>
+          Síntomas reportados ({sintomasObjetos.length})
+        </h3>
 
-        <Link
-          href="/alerta"
-          className="btn btn-secundario"
-          style={{ textDecoration: 'none', width: '100%' }}
-        >
-          <MapPin size={18} />
-          <span>{resultado.nivelAtencion === 'ATENCION_HOY' ? '📍 Activar GPS y buscar centro de salud para hoy' : '📍 Ver mapa de centros de salud cercanos'}</span>
-        </Link>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {sintomasObjetos.map((s) => (
+            <span
+              key={s?.id}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: '9999px',
+                backgroundColor: s?.esSignoAlarma ? 'var(--color-danger-soft)' : 'var(--color-surface-1)',
+                color: s?.esSignoAlarma ? '#F87171' : 'var(--color-text-secondary)',
+                border: s?.esSignoAlarma ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid var(--color-border)',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+              }}
+            >
+              <SintomaIcon nombreIcono={s?.icono || 'stethoscope'} size={14} />
+              <span>{s?.nombre}</span>
+            </span>
+          ))}
+        </div>
+      </Card>
 
-        <Link 
-          href="/sintomas" 
-          className="btn btn-fantasma"
-          style={{ textDecoration: 'none', width: '100%' }}
-        >
-          <RefreshCw size={18} />
-          <span>Volver a evaluar</span>
-        </Link>
-      </div>
-
-      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', lineHeight: 1.45, textAlign: 'center', padding: '0 10px' }}>
-        Esta evaluación es orientativa y no sustituye el diagnóstico de un médico. Si tenés dudas, consultá a tu médico o acudí al centro de salud más cercano.
-      </p>
-
-      {/* Care Recommendations List (Refined UI with icon bullets) */}
+      {/* Care Recommendations List (Full Width) */}
       <Card style={{ padding: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
           <div
@@ -473,37 +511,7 @@ export default function ResultadoEvaluacionPage() {
         </ul>
       </Card>
 
-      {/* Reported Symptoms Pills */}
-      <Card style={{ padding: '20px' }}>
-        <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, marginBottom: '14px', color: 'var(--color-text)' }}>
-          Síntomas reportados ({sintomasObjetos.length})
-        </h3>
-
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-          {sintomasObjetos.map((s) => (
-            <span
-              key={s?.id}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 14px',
-                borderRadius: '9999px',
-                backgroundColor: s?.esSignoAlarma ? 'var(--color-danger-soft)' : 'var(--color-surface-1)',
-                color: s?.esSignoAlarma ? '#F87171' : 'var(--color-text-secondary)',
-                border: s?.esSignoAlarma ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid var(--color-border)',
-                fontSize: '0.8125rem',
-                fontWeight: 600,
-              }}
-            >
-              <SintomaIcon nombreIcono={s?.icono || 'stethoscope'} size={14} />
-              <span>{s?.nombre}</span>
-            </span>
-          ))}
-        </div>
-      </Card>
-
-      {/* Save History & Register CTA for Guest Users */}
+      {/* Save History & Register CTA for Guest Users (Full Width) */}
       {!usuarioActual && (
         <Card
           style={{
@@ -550,6 +558,11 @@ export default function ResultadoEvaluacionPage() {
           </div>
         </Card>
       )}
+
+      {/* Legal Disclaimer Note */}
+      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', lineHeight: 1.45, textAlign: 'center', padding: '0 10px', margin: 0 }}>
+        Esta evaluación es orientativa y no sustituye el diagnóstico de un médico. Si tenés dudas, consultá a tu médico o acudí al centro de salud más cercano.
+      </p>
     </div>
   );
 }

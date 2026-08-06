@@ -96,7 +96,7 @@ export default function PerfilPacientePage() {
         </div>
       )}
 
-      <form onSubmit={handleGuardar} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <form onSubmit={handleGuardar} className="grid-responsive-2col">
         {/* Personal Details */}
         <Card>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -221,20 +221,22 @@ export default function PerfilPacientePage() {
           />
         </Card>
 
-        <Button variante="primario" tamano="grande" type="submit" style={{ width: '100%' }}>
-          <Save size={18} />
-          <span>Guardar Cambios</span>
-        </Button>
+        <div className="grid-col-full" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <Button variante="primario" tamano="grande" type="submit" style={{ width: '100%' }}>
+            <Save size={18} />
+            <span>Guardar Cambios</span>
+          </Button>
 
-        <Button
-          variante="fantasma"
-          type="button"
-          onClick={handleCerrarSesion}
-          style={{ width: '100%', color: 'var(--color-danger)' }}
-        >
-          <LogOut size={18} />
-          <span>Cerrar Sesión</span>
-        </Button>
+          <Button
+            variante="fantasma"
+            type="button"
+            onClick={handleCerrarSesion}
+            style={{ width: '100%', color: 'var(--color-danger)' }}
+          >
+            <LogOut size={18} />
+            <span>Cerrar Sesión</span>
+          </Button>
+        </div>
       </form>
     </div>
   );
