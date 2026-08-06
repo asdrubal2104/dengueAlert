@@ -174,7 +174,7 @@ export default function ResultadoEvaluacionPage() {
               marginBottom: '4px',
             }}
           >
-            Resultado del Triaje Presuntivo
+            Resultado de tu evaluación de síntomas
           </span>
 
           <h1

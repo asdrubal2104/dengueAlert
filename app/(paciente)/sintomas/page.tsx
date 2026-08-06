@@ -90,7 +90,7 @@ export default function SelectorSintomasPage() {
           }}
         >
           <div style={{ fontSize: '0.875rem', fontWeight: 800, color: '#FBBF24', marginBottom: '6px' }}>
-            Entre los días 3 y 6 hay que vigilarse más de cerca
+            Al tener entre 3 y 6 días con síntomas, debes prestar mayor atención
           </div>
           <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', lineHeight: 1.45, marginBottom: '12px' }}>
             ¿La fiebre bajó o desapareció recientemente?

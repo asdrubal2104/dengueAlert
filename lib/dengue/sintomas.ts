@@ -159,8 +159,8 @@ export const CATALOGO_SINTOMAS: Sintoma[] = [
   },
   {
     id: 'S18',
-    nombre: 'Inquietud o irritabilidad',
-    descripcion: 'Me siento extremadamente desesperado/a, agitado/a o inquieto/a',
+    nombre: 'Irritabilidad continua o desesperación',
+    descripcion: 'Incapacidad para calmarse, agitación extrema o llanto inconsolable',
     icono: 'zap',
     categoria: 'WARNING',
     peso: 7,

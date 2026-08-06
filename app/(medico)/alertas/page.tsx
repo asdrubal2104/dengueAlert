@@ -42,16 +42,26 @@ export default function AlertasMedicoPage() {
                 border: alerta.tipo === 'EMERGENCY' ? '1px solid rgba(239, 68, 68, 0.25)' : '1px solid rgba(249, 115, 22, 0.25)',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                <div>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '2px' }}>
-                    {alerta.pacienteNombre}
-                  </h3>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }} suppressHydrationWarning>
-                    {new Date(alerta.fechaHora).toLocaleString('es-NI')}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <Badge tipo={alerta.tipo === 'EMERGENCY' ? 'DENGUE_GRAVE' : 'DENGUE_ALARMA'} />
+                  <span
+                    style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 600, whiteSpace: 'nowrap' }}
+                    suppressHydrationWarning
+                  >
+                    {new Date(alerta.fechaHora).toLocaleDateString('es-NI', {
+                      day: 'numeric',
+                      month: 'numeric',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </span>
                 </div>
-                <Badge tipo={alerta.tipo === 'EMERGENCY' ? 'DENGUE_GRAVE' : 'DENGUE_ALARMA'} />
+
+                <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1.25, margin: 0 }}>
+                  {alerta.pacienteNombre}
+                </h3>
               </div>
 
               <div style={{ marginBottom: '14px' }}>
