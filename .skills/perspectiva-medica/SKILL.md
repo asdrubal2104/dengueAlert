@@ -240,7 +240,7 @@ SILAIS = Sistema Local de Atención Integral en Salud
 | Servicio               | Número | Notas                                      |
 | :--------------------- | :----- | :----------------------------------------- |
 | Sistema 911            | 911    | Emergencias generales (incluye ambulancia) |
-| Cruz Roja Nicaragüense | 128    | Ambulancias                                |
+| Cruz Blanca Nicaragüense | 128    | Ambulancias                                |
 | Bomberos               | 115    | Emergencias                                |
 | Policía Nacional       | 118    | Seguridad                                  |
 
@@ -322,6 +322,6 @@ Cuando presentes el proyecto, los médicos verificarán principalmente:
 2. **¿Los síntomas están bien descritos en lenguaje accesible?** → Revisar con esta guía.
 3. **¿Se menciona NO tomar aspirina/ibuprofeno?** → Debe aparecer en resultados DENGUE_POSIBLE+.
 4. **¿Hay disclaimer que no sustituye al médico?** → Obligatorio en toda pantalla de resultado.
-5. **¿Los números de emergencia son correctos?** → 911, Cruz Roja 128.
+5. **¿Los números de emergencia son correctos?** → 911, Cruz Blanca 128.
 6. **¿Los días de síntomas se registran?** → Sí, es contexto clínico relevante.
 7. **¿Las comorbilidades están presentes en el perfil?** → Sí, visibles para el médico.

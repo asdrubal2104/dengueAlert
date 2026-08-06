@@ -340,7 +340,7 @@ export const AlertOverlay: React.FC<AlertOverlayProps> = ({
             className="touch-feedback"
           >
             <Phone size={16} />
-            <span>Cruz Roja 128</span>
+            <span>Cruz Blanca 128</span>
           </a>
         </div>
 

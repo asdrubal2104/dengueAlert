@@ -266,7 +266,7 @@ export default function InicioPacientePage() {
             className="touch-feedback"
           >
             <ShieldAlert size={16} style={{ color: '#F87171' }} />
-            <span>Cruz Roja {NUMEROS_EMERGENCIA_NICARAGUA[1].numero}</span>
+            <span>Cruz Blanca {NUMEROS_EMERGENCIA_NICARAGUA[1].numero}</span>
           </a>
         </div>
       </Card>

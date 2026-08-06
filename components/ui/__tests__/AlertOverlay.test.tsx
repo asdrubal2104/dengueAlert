@@ -26,7 +26,7 @@ describe('AlertOverlay — Componente de Emergencia UI', () => {
     expect(screen.getByText('Sangrado de encías')).toBeInTheDocument();
   });
 
-  it('muestra los botones de llamadas a números de emergencia de Nicaragua (MINSA 102 y Cruz Roja 128)', () => {
+  it('muestra los botones de llamadas a números de emergencia de Nicaragua (MINSA 102 y Cruz Blanca 128)', () => {
     render(
       <AlertOverlay
         clasificacion="DENGUE_ALARMA"
@@ -39,7 +39,7 @@ describe('AlertOverlay — Componente de Emergencia UI', () => {
     const boton102 = screen.getByText('MINSA 102').closest('a');
     expect(boton102).toHaveAttribute('href', 'tel:102');
 
-    const boton128 = screen.getByText('Cruz Roja 128').closest('a');
+    const boton128 = screen.getByText('Cruz Blanca 128').closest('a');
     expect(boton128).toHaveAttribute('href', 'tel:128');
   });
 });

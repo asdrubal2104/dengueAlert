@@ -221,13 +221,13 @@ Esto se almacena en `symptom_logs.days_with_symptoms` para contexto clínico.
 **Para DENGUE_ALARMA:**
 
 - 🏥 Buscar hospital o centro de salud cercano (abre mapa)
-- 📞 Llamar a Cruz Roja (tel: 128)
+- 📞 Llamar a Cruz Blanca (tel: 128)
 - 📤 Compartir mi ubicación (genera link de Google Maps)
 
 **Para DENGUE_GRAVE:**
 
 - 🚨 Llamar 911 (marcación directa)
-- 📞 Llamar a Cruz Roja (tel: 128)
+- 📞 Llamar a Cruz Blanca (tel: 128)
 - 🏥 Ver hospital más cercano (abre mapa)
 - 📤 Compartir mi ubicación
 
@@ -236,7 +236,7 @@ Esto se almacena en `symptom_logs.days_with_symptoms` para contexto clínico.
 | Servicio         | Número |
 | :--------------- | :----- |
 | Sistema 911      | 911    |
-| Cruz Roja        | 128    |
+| Cruz Blanca        | 128    |
 | Bomberos         | 115    |
 | Policía Nacional | 118    |
 
